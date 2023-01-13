@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "nqm.irimager"
+version = "0.1.0-alpha.0"
+description = "Python module for interfacing with EvoCortex IRImagerDirect SDK"
+authors = ["Alois Klink <alois@nquiringminds.com>"]
+license = "UNLICENSED"
+readme = "README.md"
+packages = [{include = "nqm", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
