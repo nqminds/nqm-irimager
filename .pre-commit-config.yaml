@@ -46,6 +46,11 @@ repos:
               "-rn", # Only display messages
               "-sn", # Don't display the score
             ]
+    -   id: mypy
+        name: mypy
+        entry: poetry run mypy
+        language: system
+        types: [python]
 - repo: https://github.com/pycqa/isort
   rev: 5.11.4
   hooks:
