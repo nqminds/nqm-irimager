@@ -1,6 +1,7 @@
 # nqm.irimager
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Linting: Pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
 
 Python module for interfacing with [EvoCortex IRImagerDirect SDK][1].
 
