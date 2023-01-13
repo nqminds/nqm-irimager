@@ -34,6 +34,7 @@ repos:
     hooks:
     -   id: black
 -   repo: local
+    # must use the local version of pylint, so it can scan our dependencies
     hooks:
     -   id: pylint
         name: pylint
@@ -45,3 +46,8 @@ repos:
               "-rn", # Only display messages
               "-sn", # Don't display the score
             ]
+- repo: https://github.com/pycqa/isort
+  rev: 5.11.4
+  hooks:
+    - id: isort
+      name: isort (python)

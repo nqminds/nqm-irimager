@@ -19,6 +19,13 @@ pylint = "^2.15.10"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.pylint."messages control"]
+# isort sorts our imports for us and we occasionally get conflicts
+disable = ["wrong-import-position"]
+
 [tool.pylint.format]
 # for compatibility with black
 max-line-length = "88"
+
+[tool.isort]
+profile = "black"
