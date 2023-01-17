@@ -1,6 +1,8 @@
 [tool.poetry]
 name = "nqm.irimager"
-version = "0.1.0-alpha.0"
+# poetry will convert SemVer to a PEP 440 compliant version string
+# but we should use PEP 440 directly instead
+version = "0.1.0a0" # equivalent to 0.1.0-alpha.0
 description = "Python module for interfacing with EvoCortex IRImagerDirect SDK"
 authors = ["Alois Klink <alois@nquiringminds.com>"]
 license = "UNLICENSED"
