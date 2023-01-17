@@ -26,3 +26,11 @@ You may wish to run `poetry run pre-commit install` to automatically run
 checks before you run `git commit`.
 
 Additionally, you can run `poetry run pre-commit run --all` to check all changes.
+
+### Tests
+
+Tests are written using [`pytest`](https://docs.pytest.org/en/7.2.x/), and can be run with:
+
+```bash
+poetry run pytest
+```

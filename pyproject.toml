@@ -17,6 +17,7 @@ python = "^3.9"
 pre-commit = "^2.21.0"
 pylint = "^2.15.10"
 mypy = "^0.991"
+pytest = "^7.2.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -37,3 +38,8 @@ profile = "black"
 # required since we store our data in a src/ subdir
 explicit_package_bases = true
 mypy_path = "src"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
