@@ -34,3 +34,16 @@ Tests are written using [`pytest`](https://docs.pytest.org/en/7.2.x/), and can b
 ```bash
 poetry run pytest
 ```
+
+### Documentation
+
+[Sphinx](https://www.sphinx-doc.org/en/master/index.html) is used to generate
+documentation in the `docs/` directory.
+
+[sphinx.ext.napoleon](https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html)
+automatically parses Google-style Python docstrings.
+
+```bash
+poetry run sphinx-apidoc --implicit-namespaces -o docs/apidoc src/nqm/
+poetry run sphinx-build -M html docs/ build/
+```

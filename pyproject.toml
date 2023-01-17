@@ -18,10 +18,16 @@ pre-commit = "^2.21.0"
 pylint = "^2.15.10"
 mypy = "^0.991"
 pytest = "^7.2.1"
+sphinx = "^5.3.0"
+myst-parser = "^0.18.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.main]
+# checks Google-style docstrings
+load-plugins="pylint.extensions.docparams"
 
 [tool.pylint."messages control"]
 # isort sorts our imports for us and we occasionally get conflicts
