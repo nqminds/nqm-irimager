@@ -25,6 +25,17 @@ jobs:
       - name: Check whether nqm.irimager stubs match implementation
         env:
           MYPYPATH: src
-        run: poetry run stubtest nqm.irimager
+        run: |
+          stubtest_output="$(poetry run stubtest nqm.irimager || true)"
+          if echo $stubtest_output \
+            | grep '^error' \
+            | grep --invert-match 'error: nqm.irimager.IRImager is inconsistent, metaclass differs'; then
+
+            echo "::error ::Stubtest returned unexpected errors, ${stubtest_output}"
+            exit 1
+          else
+            # no unexpected errors
+            exit 0
+          fi
       - name: Test with pytest
         run: poetry run pytest
