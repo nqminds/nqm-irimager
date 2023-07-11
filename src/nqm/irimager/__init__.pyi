@@ -19,6 +19,14 @@ class IRImager:
     def __init__(self, *args, **kwargs) -> None: ...
     def test(self) -> int:
         """Return the number 42"""
+    def start_streaming(self) -> None:
+        """Start video grabbing
+
+        Raises:
+            RuntimeError: If streaming cannot be started, e.g. if the camera is not connected.
+        """
+    def stop_streaming(self) -> None:
+        """Stop video grabbing"""
     def get_frame(self) -> typing.Tuple[npt.NDArray[np.uint16], datetime.datetime]:
         """Return a frame
 
