@@ -1,6 +1,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/chrono.h>
+#include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 
 #include <chrono>
 #include <stdexcept>
@@ -17,6 +19,18 @@ class IRImager {
 
     void stop_streaming() {
         streaming = false;
+    }
+
+    IRImager* _enter_() {
+        start_streaming();
+        return this;
+    }
+
+    void _exit_(
+        [[maybe_unused]] const std::optional<pybind11::type> &exc_type,
+        [[maybe_unused]] const std::optional<pybind11::error_already_set> &exc_value,
+        [[maybe_unused]] const pybind11::object &traceback) {
+        stop_streaming();
     }
 
     std::tuple<pybind11::array_t<uint16_t>, std::chrono::system_clock::time_point> get_frame() {
@@ -64,8 +78,12 @@ Returns:
 )")
         .def("start_streaming", &IRImager::start_streaming, R"(Start video grabbing
 
+Prefer using `with irimager: ...` to automatically start/stop streaming on errors.
+
 Raises:
     RuntimeError: If streaming cannot be started, e.g. if the camera is not connected.
 )")
-        .def("stop_streaming", &IRImager::stop_streaming, R"(Stop video grabbing)");
+        .def("stop_streaming", &IRImager::stop_streaming, R"(Stop video grabbing)")
+        .def("__enter__", &IRImager::_enter_, pybind11::return_value_policy::reference_internal)
+        .def("__exit__", &IRImager::_exit_);
 }

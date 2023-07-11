@@ -8,10 +8,14 @@ We use the IRImagerDirect SDK
 to control these cameras.
 """
 import datetime
+import types
 import typing
 
 import numpy as np
 import numpy.typing as npt
+
+# TODO: replace with PEP 673 typing.Self once we support Python 3.11
+_SelfIRImager = typing.TypeVar("_SelfIRImager", bound="IRImager")
 
 class IRImager:
     """IRImager object - interfaces with a camera."""
@@ -27,6 +31,13 @@ class IRImager:
         """
     def stop_streaming(self) -> None:
         """Stop video grabbing"""
+    def __enter__(self: _SelfIRImager) -> _SelfIRImager: ...
+    def __exit__(
+        self,
+        exc_type: typing.Optional[typing.Type[BaseException]],
+        exc: typing.Optional[BaseException],
+        traceback: typing.Optional[types.TracebackType],
+    ) -> None: ...
     def get_frame(self) -> typing.Tuple[npt.NDArray[np.uint16], datetime.datetime]:
         """Return a frame
 

@@ -14,20 +14,38 @@ def test_irimager_test():
     assert irimager.test() == 42
 
 
+def test_get_frame_fails_when_not_streaming():
+    """Calling `get_frame()` should raise an error when not streaming"""
+    irimager = IRImager()
+
+    with pytest.raises(RuntimeError, match="IRIMAGER_STREAMOFF"):
+        irimager.get_frame()
+
+
+def test_get_frame_in_context_manager():
+    """Calling `get_frame()` should work when starting streaming with `with`"""
+    irimager = IRImager()
+
+    # context manager should auto-start streaming
+    with irimager:
+        irimager.get_frame()
+
+    # context manager should auto-stop streaming
+    with pytest.raises(RuntimeError, match="IRIMAGER_STREAMOFF"):
+        irimager.get_frame()
+
+
 def test_irimager_get_frame():
     """Tests nqm.irimager.IRImager#get_frame"""
     irimager = IRImager()
 
-    with pytest.raises(RuntimeError, match="IRIMAGER_STREAMOFF"):
+    with irimager:
         array, timestamp = irimager.get_frame()
 
-    irimager.start_streaming()
-    array, timestamp = irimager.get_frame()
+        assert array.dtype == np.uint16
+        # should be 2-dimensional
+        assert array.ndim == 2
+        assert array.shape == (128, 128)
 
-    assert array.dtype == np.uint16
-    # should be 2-dimensional
-    assert array.ndim == 2
-    assert array.shape == (128, 128)
-
-    # image should have been taken in the last 30 seconds
-    assert timestamp > datetime.datetime.now() - datetime.timedelta(seconds=30)
+        # image should have been taken in the last 30 seconds
+        assert timestamp > datetime.datetime.now() - datetime.timedelta(seconds=30)
