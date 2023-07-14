@@ -2,13 +2,28 @@
 #include <pybind11/numpy.h>
 #include <pybind11/chrono.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl/filesystem.h>
 #include <pybind11/stl_bind.h>
 
 #include <chrono>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
 #include <stdexcept>
 
 class IRImager {
     public:
+    IRImager() = default;
+    IRImager(const std::filesystem::path &xml_path) {
+        std::ifstream xml_stream(xml_path, std::fstream::in);
+
+        std::string xml_header(5, '\0');
+        xml_stream.read(xml_header.data(), xml_header.size());
+        if (xml_header != std::string("<?xml")) {
+            throw std::runtime_error("Invalid XML file: The given XML file does not start with '<?xml'");
+        }
+    }
+
     int test() {
         return 42;
     }
@@ -65,6 +80,7 @@ to control these cameras.)";
 
     pybind11::class_<IRImager>(m, "IRImager", R"(IRImager object - interfaces with a camera.)")
         .def(pybind11::init<>())
+        .def(pybind11::init<const std::filesystem::path &>(), R"(Loads the configuration for an IR Camera from the given XML file)")
         .def("test", &IRImager::test, "Return the number 42")
         .def("get_frame", &IRImager::get_frame, R"(Return a frame
 

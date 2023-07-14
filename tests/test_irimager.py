@@ -1,10 +1,20 @@
 """Tests for nqm.irimager.IRImager"""
 import datetime
+import pathlib
 
 import numpy as np
 import pytest
 
 from nqm.irimager import IRImager
+
+
+def test_irimager_loads_xml():
+    """Tests nqm.irimager.IRImager(xmlPath) can load an XML file"""
+    # should work with a valid XML file
+    IRImager(pathlib.Path("tests/__fixtures__/382x288@27Hz.xml"))
+
+    with pytest.raises(RuntimeError, match="Invalid XML file"):
+        IRImager(pathlib.Path("README.md"))
 
 
 def test_irimager_test():
