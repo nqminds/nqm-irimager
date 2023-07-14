@@ -24,10 +24,6 @@ class IRImager {
         }
     }
 
-    int test() {
-        return 42;
-    }
-
     void start_streaming() {
         streaming = true;
     }
@@ -85,7 +81,6 @@ to control these cameras.)";
     pybind11::class_<IRImager>(m, "IRImager", R"(IRImager object - interfaces with a camera.)")
         .def(pybind11::init<>())
         .def(pybind11::init<const std::filesystem::path &>(), R"(Loads the configuration for an IR Camera from the given XML file)")
-        .def("test", &IRImager::test, "Return the number 42")
         .def("get_frame", &IRImager::get_frame, R"(Return a frame
 
 Raises:

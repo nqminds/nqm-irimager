@@ -26,8 +26,6 @@ class IRImager:
     @typing.overload
     def __init__(self, xml_path: os.PathLike) -> None:
         """Loads the configuration for an IR Camera from the given XML file"""
-    def test(self) -> int:
-        """Return the number 42"""
     def start_streaming(self) -> None:
         """Start video grabbing
 

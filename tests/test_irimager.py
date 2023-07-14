@@ -17,13 +17,6 @@ def test_irimager_loads_xml():
         IRImager(pathlib.Path("README.md"))
 
 
-def test_irimager_test():
-    """Tests nqm.irimager.IRImager"""
-    irimager = IRImager()
-
-    assert irimager.test() == 42
-
-
 def test_get_frame_fails_when_not_streaming():
     """Calling `get_frame()` should raise an error when not streaming"""
     irimager = IRImager()
