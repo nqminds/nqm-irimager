@@ -60,11 +60,15 @@ class IRImager {
 
         for (ssize_t i = 0; i < frame_size[0]; i++) {
             for (ssize_t j = 0; j < frame_size[1]; j++) {
-                r(i, j) = 1800;
+                r(i, j) = 1800 * std::pow(10, get_temp_range_decimal());
             }
         }
 
         return std::make_tuple(my_array, std::chrono::system_clock::now());
+    }
+
+    short get_temp_range_decimal() {
+        return 1;
     }
 
 private:
@@ -89,8 +93,17 @@ Raises:
 
 Returns:
     A tuple containing:
-        - A 2-D numpy array containing the image.
+        - A 2-D numpy array containing the image. This must be adjusted
+          by :py:meth:`~IRImager.get_temp_range_decimal` to get the
+          actual temperature in degrees Celcius.
         - The time the image was taken.
+)")
+        .def("get_temp_range_decimal", &IRImager::get_temp_range_decimal, R"(The number of decimal places in the thermal data
+
+For example, if :py:meth:`~IRImager.get_frame` returns 18000, you can
+divide this number by 10 to the power of the result of
+:py:meth:`~IRImager.get_temp_range_decimal` to get the actual
+temperature in degrees Celcius.
 )")
         .def("start_streaming", &IRImager::start_streaming, R"(Start video grabbing
 

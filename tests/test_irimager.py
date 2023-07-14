@@ -59,3 +59,11 @@ def test_irimager_get_frame():
 
         # image should have been taken in the last 30 seconds
         assert timestamp > datetime.datetime.now() - datetime.timedelta(seconds=30)
+
+
+def test_irimager_get_temp_range_decimal():
+    """Tests that nqm.irimager.IRImager#get_temp_range_decimal returns an int"""
+    irimager = IRImager()
+
+    assert irimager.get_temp_range_decimal() >= 0
+    assert isinstance(irimager.get_temp_range_decimal(), int)

@@ -48,6 +48,16 @@ class IRImager:
 
         Returns:
             A tuple containing:
-                - A 2-D numpy array containing the image.
+                - A 2-D numpy array containing the image. This must be adjusted
+                  by :py:meth:`~IRImager.get_temp_range_decimal` to get the
+                  actual temperature in degrees Celcius.
                 - The time the image was taken.
+        """
+    def get_temp_range_decimal(self) -> int:
+        """The number of decimal places in the thermal data
+
+        For example, if :py:meth:`~IRImager.get_frame` returns 18000, you can
+        divide this number by 10 to the power of the result of
+        :py:meth:`~IRImager.get_temp_range_decimal` to get the actual
+        temperature in degrees Celcius.
         """
