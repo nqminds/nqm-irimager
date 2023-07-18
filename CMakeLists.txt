@@ -31,8 +31,14 @@ add_custom_command(
 )
 
 python_add_library(irimager MODULE
-  src/nqm/irimager/irimager.cpp "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
+  src/nqm/irimager/irimager.cpp
+  src/nqm/irimager/irimager_class.cpp
+  "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
   WITH_SOABI
+)
+set_target_properties(irimager PROPERTIES
+  PRIVATE_HEADER
+    "src/nqm/irimager/irimager_class.hpp;${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
 )
 target_link_libraries(irimager PRIVATE pybind11::headers)
 target_compile_features(irimager PRIVATE cxx_std_17)
