@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "nqm.irimager"
+# poetry will convert SemVer to a PEP 440 compliant version string
+# but we should use PEP 440 directly instead
+version = "0.1.0a0" # equivalent to 0.1.0-alpha.0
+description = "Python module for interfacing with EvoCortex IRImagerDirect SDK"
+authors = ["Alois Klink <alois@nquiringminds.com>"]
+license = "UNLICENSED"
+readme = "README.md"
+packages = [{include = "nqm", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^2.21.0"
+pylint = "^2.15.10"
+mypy = "^1.4.1"
+pytest = "^7.2.1"
+sphinx = "^5.3.0"
+myst-parser = "^0.18.1"
+isort = "^5.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.main]
+# checks Google-style docstrings
+load-plugins="pylint.extensions.docparams"
+
+[tool.pylint."messages control"]
+# isort sorts our imports for us and we occasionally get conflicts
+disable = ["wrong-import-position"]
+
+[tool.pylint.format]
+# for compatibility with black
+max-line-length = "88"
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+# required since we store our data in a src/ subdir
+explicit_package_bases = true
+mypy_path = "src"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
