@@ -13,7 +13,12 @@ dependencies = [
 ]
 
 [build-system]
-requires = ["scikit-build-core>=0.4.7", "pybind11>=2.10.4"]
+requires = [
+    "scikit-build-core>=0.4.7",
+    "pybind11>=2.10.4",
+    # until https://github.com/pybind/pybind11_mkdoc/pull/32 is merged
+    "pybind11_mkdoc @ git+https://github.com/corna/pybind11_mkdoc.git"
+]
 build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
