@@ -1,9 +1,6 @@
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-#include <pybind11/chrono.h>
-#include <pybind11/stl.h>
-#include <pybind11/stl/filesystem.h>
-#include <pybind11/stl_bind.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/chrono.h>
+#include <nanobind/stl/filesystem.h>
 
 #include "./irimager_class.hpp"
 
@@ -13,20 +10,20 @@
 
 #include DOCSTRINGS_H
 
-PYBIND11_MODULE(irimager, m) {
+NB_MODULE(irimager, m) {
     m.doc() = R"(Optris PI and XI imager IR camera controller
 
 We use the IRImagerDirect SDK
 (see http://documentation.evocortex.com/libirimager2/html/index.html)
 to control these cameras.)";
 
-    pybind11::class_<IRImager>(m, "IRImager", DOC(IRImager))
-        .def(pybind11::init<>())
-        .def(pybind11::init<const std::filesystem::path &>(), DOC(IRImager, IRImager, 2))
+    nanobind::class_<IRImager>(m, "IRImager", DOC(IRImager))
+        .def(nanobind::init<>())
+        .def(nanobind::init<const std::filesystem::path &>(), DOC(IRImager, IRImager, 2))
         .def("get_frame", &IRImager::get_frame, DOC(IRImager, get_frame))
         .def("get_temp_range_decimal", &IRImager::get_temp_range_decimal, DOC(IRImager, get_temp_range_decimal))
         .def("start_streaming", &IRImager::start_streaming, DOC(IRImager, start_streaming))
         .def("stop_streaming", &IRImager::stop_streaming, DOC(IRImager, stop_streaming))
-        .def("__enter__", &IRImager::_enter_, pybind11::return_value_policy::reference_internal)
+        .def("__enter__", &IRImager::_enter_, nanobind::rv_policy::reference_internal)
         .def("__exit__", &IRImager::_exit_);
 }
