@@ -8,18 +8,19 @@ jobs:
         python-version: ["3.9"]
     steps:
       - uses: actions/checkout@v3
-      - name: Install poetry
-        run: pipx install poetry
+      - name: Install pdm
+        run: pipx install pdm
       - name: Use Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          cache: poetry
-      - run: poetry install
+          cache: pip
+          cache-dependency-path: 'pdm.lock'
+      - run: pdm install
       - name: Build documentation into `build/` folder
         run: |
-          poetry run sphinx-apidoc --implicit-namespaces -o docs/apidoc src/nqm/
-          poetry run sphinx-build -M html docs/ build/
+          pdm run sphinx-apidoc --implicit-namespaces -o docs/apidoc src/nqm/
+          pdm run sphinx-build -M html docs/ build/
       - name: Upload docs
         uses: actions/upload-pages-artifact@v1
         with:
