@@ -23,6 +23,7 @@ build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
 wheel.packages = [ "src/nqm" ]
+wheel.license-files = [ "LICENSES/*" ]
 
 [tool.pylint.main]
 # checks Google-style docstrings
