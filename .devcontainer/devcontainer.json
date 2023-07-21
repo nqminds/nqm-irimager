@@ -1,0 +1,22 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "Ubuntu",
+	"build": { "dockerfile": "Dockerfile" },
+
+	"runArgs": ["--log-driver=none"], // workaround for https://github.com/microsoft/vscode-remote-release/issues/7175
+	"remoteUser": "root", // needed to avoid https://github.com/microsoft/vscode-remote-release/issues/7657
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": {
+	}
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+}
