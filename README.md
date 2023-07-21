@@ -46,8 +46,20 @@ For most Python code, we put the type information directly in the
 implementation, so we only need this for C/C++ Python extensions, like the
 `nqm.irimager` module.
 
+> **Note**
+>
+> The `error: nqm.irimager.IRImager is inconsistent, metaclass differs` errors
+> are expected, due to the inability to stub built-in pybind11 types.
+
 ```bash
-MYPYPATH=src poetry run stubtest nqm.irimager
+me@user:~$ MYPYPATH=src poetry run stubtest nqm.irimager
+error: nqm.irimager.IRImager is inconsistent, metaclass differs
+Stub: in file src/nqm/irimager/__init__.pyi:11
+N/A
+Runtime:
+<class 'pybind11_builtins.pybind11_type'>
+
+Found 1 error (checked 1 module)
 ```
 
 ### Documentation
