@@ -44,6 +44,7 @@ repos:
             [
               "-rn", # Only display messages
               "-sn", # Don't display the score
+              "--extension-pkg-whitelist=nqm.irimager", # import our custom C extension
             ]
     -   id: mypy
         name: mypy

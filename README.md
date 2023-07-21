@@ -35,6 +35,21 @@ Tests are written using [`pytest`](https://docs.pytest.org/en/7.2.x/), and can b
 poetry run pytest
 ```
 
+#### Mypy stubtest
+
+You can use
+[Mypy's `stubtest` tool](https://mypy.readthedocs.io/en/stable/stubtest.html)
+to automatically check whether the types in a stub file match the
+implementation.
+
+For most Python code, we put the type information directly in the
+implementation, so we only need this for C/C++ Python extensions, like the
+`nqm.irimager` module.
+
+```bash
+MYPYPATH=src poetry run stubtest nqm.irimager
+```
+
 ### Documentation
 
 [Sphinx](https://www.sphinx-doc.org/en/master/index.html) is used to generate
