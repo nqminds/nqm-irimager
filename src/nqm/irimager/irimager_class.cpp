@@ -1,6 +1,16 @@
 #include "./irimager_class.hpp"
 
-IRImager::IRImager() = default;
+struct IRImager::impl final {
+    bool streaming = false;
+
+    ~impl() = default;
+};
+
+IRImager::IRImager(): pImpl{std::make_unique<IRImager::impl>()} {};
+
+IRImager::IRImager(const IRImager& other): pImpl{std::make_unique<IRImager::impl>(*other.pImpl)} {};
+
+IRImager::IRImager(IRImager&& other) = default;
 
 IRImager::IRImager(const std::filesystem::path &xml_path) {
     std::ifstream xml_stream(xml_path, std::fstream::in);
@@ -12,12 +22,14 @@ IRImager::IRImager(const std::filesystem::path &xml_path) {
     }
 }
 
+IRImager::~IRImager() = default;
+
 void IRImager::start_streaming() {
-    streaming = true;
+    pImpl->streaming = true;
 }
 
 void IRImager::stop_streaming() {
-    streaming = false;
+    pImpl->streaming = false;
 }
 
 IRImager* IRImager::_enter_() {
@@ -37,7 +49,7 @@ std::tuple<
     pybind11::array_t<uint16_t>,
     std::chrono::system_clock::time_point
 > IRImager::get_frame() {
-    if (!streaming) {
+    if (!pImpl->streaming) {
         throw std::runtime_error("IRIMAGER_STREAMOFF: Not streaming");
     }
 

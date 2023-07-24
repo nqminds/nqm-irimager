@@ -6,16 +6,33 @@
 
 #include <pybind11/numpy.h>
 
+#include "./propogate_const.hpp"
+
 /**
  * IRImager object - interfaces with a camera.
  */
 class IRImager {
     public:
+    /**
+     * Default constructor.
+     */
     IRImager();
+    /**
+     * Copies and existing IRImager object.
+     */
+    IRImager(const IRImager&);
+    /**
+     * Moves an existing IRImager object into the new stack location.
+     */
+    IRImager(IRImager&&);
+
     /**
      * Loads the configuration for an IR Camera from the given XML file
      */
     IRImager(const std::filesystem::path &xml_path);
+
+    /** Destructor */
+    virtual ~IRImager();
 
     /**
      * Start video grabbing
@@ -68,5 +85,8 @@ class IRImager {
     short get_temp_range_decimal();
 
 private:
-    bool streaming = false;
+    /** pImpl implementation */
+    struct impl;
+    // pImpl, see https://en.cppreference.com/w/cpp/language/pimpl
+    propagate_const<std::unique_ptr<impl>> pImpl;
 };
