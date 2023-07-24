@@ -1,39 +1,24 @@
-[tool.poetry]
+[project]
 name = "nqm.irimager"
-# poetry will convert SemVer to a PEP 440 compliant version string
-# but we should use PEP 440 directly instead
 version = "0.1.0a0" # equivalent to 0.1.0-alpha.0
 description = "Python module for interfacing with EvoCortex IRImagerDirect SDK"
-authors = ["Alois Klink <alois@nquiringminds.com>"]
-license = "UNLICENSED"
+requires-python = ">=3.8, <4.0"
+authors = [
+    { name = "Alois Klink", email = "alois@nquiringminds.com" }
+]
 readme = "README.md"
-packages = [{include = "nqm", from = "src"}]
 
-
-[tool.poetry.build]
-# build a custom C++ extension using build.py
-script = "build.py"
-generate-setup-file = true
-
-[tool.poetry.dependencies]
-python = "^3.8"
-pybind11 = "^2.10.4"
-numpy = "^1.24.3"
-
-
-[tool.poetry.group.dev.dependencies]
-pre-commit = "^2.21.0"
-pylint = "^2.15.10"
-mypy = "^1.4.1"
-pytest = "^7.2.1"
-sphinx = "^5.3.0"
-myst-parser = "^0.18.1"
-isort = "^5.12.0"
-types-setuptools = ">=45.2.0"
+dependencies = [
+    "numpy >=1.24.3, <1.25.0"
+]
 
 [build-system]
-requires = ["poetry-core", "setuptools>=45.2.0", "pybind11>=2.10.4"]
-build-backend = "poetry.core.masonry.api"
+requires = ["pdm-backend>=2.1.4", "pybind11>=2.10.4"]
+build-backend = "pdm.backend"
+
+[tool.pdm.build]
+run-setuptools = true
+custom-hook = "build.py"
 
 [tool.pylint.main]
 # checks Google-style docstrings
@@ -58,4 +43,21 @@ mypy_path = "src"
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",
+]
+
+[tool.pdm.dev-dependencies]
+lint = [
+    "pre-commit >=2.21.0, <3.0.0",
+    "pylint >=2.15.10, <3.0.0",
+    "isort>=5.12.0",
+]
+types = [
+    "mypy>=1.4.1",
+]
+test = [
+    "pytest>=7.4.0",
+]
+docs = [
+    "sphinx>=5.3.0",
+    "myst-parser >=0.18.1, <0.19.0",
 ]

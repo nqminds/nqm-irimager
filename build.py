@@ -1,4 +1,4 @@
-"""Poetry build script that builds the nqm.irimager Python C++ extension
+"""PDM build script that builds the nqm.irimager Python C++ extension
 """
 from pybind11.setup_helpers import Pybind11Extension, build_ext
 
@@ -9,9 +9,9 @@ nqm_irimager_extension = Pybind11Extension(
 )
 
 
-def build(setup_kwargs):
+def pdm_build_update_setup_kwargs(context, setup_kwargs):
     """
-    This is a callback for poetry used to hook in our extensions.
+    This is a callback for PDM used to hook in our extensions.
     """
 
     setup_kwargs.update(

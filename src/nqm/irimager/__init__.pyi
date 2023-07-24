@@ -1,5 +1,5 @@
 # This file was auto-generated and modified by hand from
-# `poetry run stubgen -m nqm.irimager`
+# `pdm run stubgen -m nqm.irimager`
 
 """Optris PI and XI imager IR camera controller
 
