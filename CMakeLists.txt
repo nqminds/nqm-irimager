@@ -14,6 +14,8 @@ project(
   VERSION "${skbuild_project_numeric_version}"
   LANGUAGES CXX)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 find_package(pybind11 CONFIG REQUIRED)
 
@@ -30,9 +32,11 @@ add_custom_command(
   VERBATIM
 )
 
+set(IRImager_mock OFF CACHE BOOL "If set, use a mock IRImager implementation that mocks an OPTIS IR camera")
+
 python_add_library(irimager MODULE
-  src/nqm/irimager/irimager.cpp
-  src/nqm/irimager/irimager_class.cpp
+  "src/nqm/irimager/irimager.cpp"
+  "$<IF:$<BOOL:${IRImager_mock}>,src/nqm/irimager/irimager_mock.cpp,src/nqm/irimager/irimager_class.cpp>"
   "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
   WITH_SOABI
 )
@@ -41,6 +45,21 @@ set_target_properties(irimager PROPERTIES
     "src/nqm/irimager/irimager_class.hpp;${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
 )
 target_link_libraries(irimager PRIVATE pybind11::headers)
+
+if(NOT IRImager_mock)
+  find_package(IRImager)
+
+  if(NOT IRImager_FOUND)
+    message(FATAL_ERROR "libirimager was not found. \
+      It can be downloaded from https://evocortex.org/products/irimagerdirect-sdk/. \
+      Alternatively, compile with `SKBUILD_CMAKE_ARGS='-DIRImager_mock=ON'` to
+      create a mocked extension \
+      that doesn't need libirimager, or a thermal camera.")
+  endif()
+
+  target_link_libraries(irimager PRIVATE IRImager::IRImager)
+endif(NOT IRImager_mock)
+
 target_compile_features(irimager PRIVATE cxx_std_17)
 target_compile_definitions(irimager PRIVATE
   VERSION_INFO=${PROJECT_VERSION}

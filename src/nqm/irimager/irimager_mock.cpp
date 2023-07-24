@@ -1,9 +1,7 @@
 #include "./irimager_class.hpp"
-#include "libirimager/IRDevice.h"
 
 struct IRImager::impl final {
     bool streaming = false;
-    std::shared_ptr<evo::IRDevice> ir_device;
 
     ~impl() = default;
 };
