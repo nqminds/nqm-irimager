@@ -12,7 +12,8 @@ Python module for interfacing with [EvoCortex IRImagerDirect SDK][1].
 ## Setup
 
 This repo uses [PEP621](https://peps.python.org/pep-0621/) to manage
-dependencies.
+dependencies. [scikit-build-core](https://pypi.org/project/scikit-build-core/)
+is used to compile the project as a `build-system.build-backend`.
 
 We recommend using [PDM](https://pdm.fming.dev/latest/) for local development.
 

@@ -13,12 +13,11 @@ dependencies = [
 ]
 
 [build-system]
-requires = ["pdm-backend>=2.1.4", "pybind11>=2.10.4"]
-build-backend = "pdm.backend"
+requires = ["scikit-build-core>=0.4.7", "pybind11>=2.10.4"]
+build-backend = "scikit_build_core.build"
 
-[tool.pdm.build]
-run-setuptools = true
-custom-hook = "build.py"
+[tool.scikit-build]
+wheel.packages = [ "src/nqm" ]
 
 [tool.pylint.main]
 # checks Google-style docstrings
