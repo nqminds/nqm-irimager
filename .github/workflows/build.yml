@@ -13,6 +13,7 @@ on:
 
 env:
   libirimager_version: "4.1.1"
+  libirmager_arches: 'amd64 arm64'
 
 jobs:
   build_wheels:
@@ -31,7 +32,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: "${{ runner.temp }}/libirimager"
-          key: libirimager-${{ env.libirimager_version }}
+          key: libirimager-${{ env.libirimager_version }}-${{ env.libirmager_arches }}
 
       - name: Download libirimager ${{ env.libirimager_version }}
         if: steps.libirimager-cache.outputs.cache-hit != 'true'
@@ -39,7 +40,7 @@ jobs:
         run: |
           mkdir -p libirimager
           cd libirimager
-          for ARCH in "amd64"; do
+          for ARCH in ${libirmager_arches}; do
             wget "http://ftp.evocortex.com/libirimager-4.1.1-${ARCH}.deb"
           done
 

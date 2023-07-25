@@ -71,7 +71,9 @@ docs = [
 [tool.cibuildwheel]
 build = "cp*-manylinux_*" # any standard CPython Linux
 archs = [
-    "auto64" # skip building 32-bit builds
+    "auto64", # skip building 32-bit builds, even if our OS supports it
+    "aarch64",
+    "x86_64",
 ]
 test-command = "pytest {project}/tests"
 test-requires = "pytest"
