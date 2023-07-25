@@ -65,3 +65,11 @@ docs = [
     "sphinx>=5.3.0",
     "myst-parser >=0.18.1, <0.19.0",
 ]
+
+[tool.cibuildwheel]
+build = "cp*-manylinux_*" # any standard CPython Linux
+archs = [
+    "auto64" # skip building 32-bit builds
+]
+test-command = "pytest {project}/tests"
+test-requires = "pytest"
