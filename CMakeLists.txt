@@ -17,8 +17,26 @@ project(
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 find_package(pybind11 CONFIG REQUIRED)
 
-python_add_library(irimager MODULE src/nqm/irimager/irimager.cpp WITH_SOABI)
+add_custom_command(
+  OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
+  COMMAND Python::Interpreter
+  ARGS
+    -m pybind11_mkdoc
+    --output "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
+    "-I;$<JOIN:$<TARGET_PROPERTY:irimager,INCLUDE_DIRECTORIES>,;-I;>"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/nqm/irimager/irimager_class.hpp"
+  COMMAND_EXPAND_LISTS
+  VERBATIM
+)
+
+python_add_library(irimager MODULE
+  src/nqm/irimager/irimager.cpp "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
+  WITH_SOABI
+)
 target_link_libraries(irimager PRIVATE pybind11::headers)
-target_compile_definitions(irimager PRIVATE VERSION_INFO=${PROJECT_VERSION})
+target_compile_definitions(irimager PRIVATE
+  VERSION_INFO=${PROJECT_VERSION}
+  DOCSTRINGS_H="${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
+)
 
 install(TARGETS irimager DESTINATION "nqm")
