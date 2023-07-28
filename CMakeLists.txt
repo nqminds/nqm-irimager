@@ -9,8 +9,15 @@ string(REGEX MATCH
     "${SKBUILD_PROJECT_VERSION}"
 )
 
+if (NOT SKBUILD)
+  message(WARNING "\
+  This CMake file is meant to be executed using 'scikit-build-core'. You should
+  probably be running this CMake file by using a command like `pip install .`.
+  ")
+endif()
+
 project(
-  ${SKBUILD_PROJECT_NAME}
+  "${SKBUILD_PROJECT_NAME}"
   VERSION "${skbuild_project_numeric_version}"
   LANGUAGES CXX)
 
