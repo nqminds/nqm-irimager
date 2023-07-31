@@ -77,3 +77,7 @@ std::tuple<
 short IRImager::get_temp_range_decimal() {
     return 1;
 }
+
+std::string_view IRImager::get_library_version() {
+    return "MOCKED";
+}

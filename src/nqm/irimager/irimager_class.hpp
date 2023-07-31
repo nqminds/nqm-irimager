@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
+#include <string_view>
 
 #include <pybind11/numpy.h>
 
@@ -83,6 +84,14 @@ class IRImager {
      * to get the actual temperature in degrees Celcius.
      */
     short get_temp_range_decimal();
+
+    /**
+     * Get the version of the libirimager library.
+     *
+     * @returns the version of the libirmager library, or "MOCKED" if the
+     * library has been mocked.
+     */
+    static std::string_view get_library_version();
 
 private:
     /** pImpl implementation */

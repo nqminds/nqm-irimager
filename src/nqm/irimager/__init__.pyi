@@ -65,3 +65,11 @@ class IRImager:
         :py:meth:`~IRImager.get_temp_range_decimal` to get the actual
         temperature in degrees Celcius.
         """
+    @staticmethod
+    def get_library_version(self) -> typing.Union[str, typing.Literal["MOCKED"]]:
+        """Get the version of the libirimager library.
+
+        Returns:
+            the version of the libirmager library, or "MOCKED" if the library
+            has been mocked.
+        """

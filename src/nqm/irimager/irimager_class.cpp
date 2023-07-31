@@ -1,5 +1,6 @@
 #include "./irimager_class.hpp"
 #include "libirimager/IRDevice.h"
+#include "libirimager/IRImager.h"
 
 struct IRImager::impl final {
     bool streaming = false;
@@ -71,4 +72,8 @@ std::tuple<
 
 short IRImager::get_temp_range_decimal() {
     return 1;
+}
+
+std::string_view IRImager::get_library_version() {
+    return evo::IRImager::getVersion();
 }
