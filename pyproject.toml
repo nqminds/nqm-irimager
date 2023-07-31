@@ -17,7 +17,8 @@ requires = [
     "scikit-build-core>=0.4.7",
     "pybind11>=2.10.4",
     # until https://github.com/pybind/pybind11_mkdoc/pull/32 is merged
-    "pybind11_mkdoc @ git+https://github.com/corna/pybind11_mkdoc.git#e71d15f12f4c6eee1d04c724cb5946a5d8ef149d"
+    # and https://github.com/sighingnow/libclang/issues/59 is fixed
+    "pybind11_mkdoc @ git+https://github.com/aloisklink/pybind11_mkdoc.git@8461768849fa45268fc588a6f1377c14e461cbca"
 ]
 build-backend = "scikit_build_core.build"
 
