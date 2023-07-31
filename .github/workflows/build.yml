@@ -39,7 +39,7 @@ jobs:
               i686) ARCH="386";;
               i386) ARCH="386";;
             esac
-            dnf install epel-release wget systemd-devel libusb-devel --assumeyes
+            dnf install epel-release wget systemd-devel libusb1-devel --assumeyes
             dnf install alien --assumeyes
             wget "http://ftp.evocortex.com/libirimager-4.1.1-${ARCH}.deb"
             alien --to-rpm "./libirimager-4.1.1-${ARCH}.deb"
