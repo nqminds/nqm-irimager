@@ -16,7 +16,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
           cache-dependency-path: 'pdm.lock'
-      - run: pdm install
+      - name: pdm install, using mock libirimager library
+        run: pdm install
+        env:
+          SKBUILD_CMAKE_ARGS: "-DIRImager_mock=ON"
       - name: Build documentation into `build/` folder
         run: |
           pdm run sphinx-apidoc --implicit-namespaces -o docs/apidoc src/nqm/

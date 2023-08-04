@@ -11,6 +11,18 @@ Python module for interfacing with [EvoCortex IRImagerDirect SDK][1].
 
 ## Setup
 
+### Installing `libirimager`
+
+`nqm.irimager` requires the [EvoCortex IRImagerDirect SDK][1]
+(known as `libirimager`). Please follow the instructions on their webpage to
+install the package.
+
+It's possible to install a mocked version of `nqm.irimager` for testing
+by defining `SKBUILD_CMAKE_ARGS='-DIRImager_mock=ON'` whiling building
+`nqm.irimager`.
+
+### Install `nqm.irimager`
+
 This repo uses [PEP621](https://peps.python.org/pep-0621/) to manage
 dependencies. [scikit-build-core](https://pypi.org/project/scikit-build-core/)
 is used to compile the project as a `build-system.build-backend`.

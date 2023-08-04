@@ -7,7 +7,9 @@ RUN wget http://ftp.evocortex.com/libirimager-4.1.1-amd64.deb -O /tmp/libirimage
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install --yes \
         'libudev-dev' \
+        'libusb-dev' \
         'gcc' \
+        'pkg-config' \
         'build-essential' \
         'cmake'
 
