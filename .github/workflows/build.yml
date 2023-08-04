@@ -60,18 +60,18 @@ jobs:
             set -e # exit on error
             ARCH="$(uname -m)" # convert the Linux arch to Debian ABI arch
             case $ARCH in
-              armv5*) ARCH="armv5";;
-              armv6*) ARCH="armv6";;
-              armv7*) ARCH="arm";;
-              aarch64) ARCH="arm64";;
-              x86) ARCH="386";;
-              x86_64) ARCH="amd64";;
-              i686) ARCH="386";;
-              i386) ARCH="386";;
+              armv5*) DEB_ARCH="armv5";;
+              armv6*) DEB_ARCH="armv6";;
+              armv7*) DEB_ARCH="arm";;
+              aarch64) DEB_ARCH="arm64";;
+              x86) DEB_ARCH="386";;
+              x86_64) DEB_ARCH="amd64";;
+              i686) DEB_ARCH="386";;
+              i386) DEB_ARCH="386";;
             esac
             dnf install epel-release wget systemd-devel libusb-devel --assumeyes
             dnf install alien --assumeyes
-            alien --to-rpm "${LIBIRIMAGER_DOWNLOAD_DIR}/libirimager-4.1.1-${ARCH}.deb"
+            alien --to-rpm --target="$ARCH" "${LIBIRIMAGER_DOWNLOAD_DIR}/libirimager-4.1.1-${DEB_ARCH}.deb"
             # the auto-generated RPM made by alien is kinda buggy, so we need
             # to use --replacefiles to avoid rpm throwing an error
             rpm --install --replacefiles ./libirimager-4.1.1-*.rpm
