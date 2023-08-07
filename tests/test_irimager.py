@@ -38,6 +38,15 @@ def test_get_frame_in_context_manager():
         irimager.get_frame()
 
 
+def test_context_manager_handles_error():
+    """Tests whether the `__exit__` dunder can handle an error"""
+    irimager = IRImager()
+
+    with pytest.raises(RuntimeError, match="Test Exception, should be thrown"):
+        with irimager:
+            raise RuntimeError("Test Exception, should be thrown")
+
+
 def test_irimager_get_frame():
     """Tests nqm.irimager.IRImager#get_frame"""
     irimager = IRImager()

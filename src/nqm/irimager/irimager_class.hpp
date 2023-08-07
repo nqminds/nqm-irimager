@@ -54,8 +54,8 @@ class IRImager {
 
     void _exit_(
         const std::optional<pybind11::type> &exc_type,
-        const std::optional<pybind11::error_already_set> &exc_value,
-        const pybind11::object &traceback);
+        const std::optional<pybind11::object> &exc_value,
+        const std::optional<pybind11::object> &traceback);
 
     /**
      * Return a frame
