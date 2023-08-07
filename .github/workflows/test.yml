@@ -16,10 +16,18 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
           cache-dependency-path: 'pdm.lock'
+      - name: Set up CPM cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/cpm-cache
+          key: ${{ runner.os }}-cpm-${{ hashFiles('./package-lock.cmake') }}
+          restore-keys: |
+            ${{ runner.os }}-cpm-
       - name: pdm install, using mock libirimager library
         run: pdm install
         env:
           SKBUILD_CMAKE_ARGS: "-DIRImager_mock=ON"
+          CPM_SOURCE_CACHE: ~/.cache/cpm-cache
       - name: Run pre-commit checks
         env:
           # SKIP `no-commit-to-branch`, otherwise CI on `main` will fail,
