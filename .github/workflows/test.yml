@@ -29,6 +29,11 @@ jobs:
           SKBUILD_CMAKE_ARGS: "-DIRImager_mock=ON"
           CPM_SOURCE_CACHE: ~/.cache/cpm-cache
           SKBUILD_CMAKE_BUILD_TYPE: "Debug" # makes compiler warnings into errors
+      - uses: actions/cache@v3
+        name: Cache pre-commit
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ matrix.python-version }}-${{ hashFiles('.pre-commit-config.yaml') }}
       - name: Run pre-commit checks
         env:
           # SKIP `no-commit-to-branch`, otherwise CI on `main` will fail,
