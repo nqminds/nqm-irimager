@@ -25,15 +25,9 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # CMake Package Manager
 include(CPM)
+CPMUsePackageLock(package-lock.cmake)
 
-CPMAddPackage(
-  NAME spdlog
-  VERSION 1.12.0
-  URL https://github.com/gabime/spdlog/archive/refs/tags/v1.12.0.tar.gz
-  URL_HASH SHA3_256=951142aefc65510834d3731872bfce9186dc4d18682a773b7b7f487dd08653e1
-  OPTIONS
-    "SPDLOG_BUILD_PIC ON" #need -fPIC to link static lib in shared lib
-)
+CPMGetPackage(spdlog)
 
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 find_package(pybind11 CONFIG REQUIRED)

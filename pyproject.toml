@@ -24,6 +24,7 @@ build-backend = "scikit_build_core.build"
 [tool.scikit-build]
 wheel.packages = [ "src/nqm" ]
 wheel.license-files = [ "LICENSES/*" ]
+cmake.targets = ["irimager", "cpm-update-package-lock"]
 
 [tool.pylint.main]
 # checks Google-style docstrings
