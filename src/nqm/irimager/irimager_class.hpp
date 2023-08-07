@@ -77,10 +77,10 @@ class IRImager {
     /**
      * The number of decimal places in the thermal data
      *
-     * For example, if :py:meth:`~IRImager.get_frame` returns 18000, you can
+     * For example, if :py:meth:`~IRImager.get_frame` returns 19000, you can
      * divide this number by 10 to the power of the result of
-     * :py:meth:`~IRImager.get_temp_range_decimal` to get the actual
-     * temperature in degrees Celcius.
+     * :py:meth:`~IRImager.get_temp_range_decimal`, then subtract 100,
+     * to get the actual temperature in degrees Celcius.
      */
     short get_temp_range_decimal();
 

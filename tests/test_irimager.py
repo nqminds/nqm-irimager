@@ -48,7 +48,7 @@ def test_irimager_get_frame():
         assert array.dtype == np.uint16
         # should be 2-dimensional
         assert array.ndim == 2
-        assert array.shape == (128, 128)
+        assert array.shape == (382, 288)
 
         # image should have been taken in the last 30 seconds
         assert timestamp > datetime.datetime.now() - datetime.timedelta(seconds=30)
