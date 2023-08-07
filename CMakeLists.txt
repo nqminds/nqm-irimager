@@ -26,6 +26,15 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # CMake Package Manager
 include(CPM)
 
+CPMAddPackage(
+  NAME spdlog
+  VERSION 1.12.0
+  URL https://github.com/gabime/spdlog/archive/refs/tags/v1.12.0.tar.gz
+  URL_HASH SHA3_256=951142aefc65510834d3731872bfce9186dc4d18682a773b7b7f487dd08653e1
+  OPTIONS
+    "SPDLOG_BUILD_PIC ON" #need -fPIC to link static lib in shared lib
+)
+
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 find_package(pybind11 CONFIG REQUIRED)
 
@@ -54,7 +63,7 @@ set_target_properties(irimager PROPERTIES
   PRIVATE_HEADER
     "src/nqm/irimager/irimager_class.hpp;${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
 )
-target_link_libraries(irimager PRIVATE pybind11::headers)
+target_link_libraries(irimager PRIVATE pybind11::headers spdlog::spdlog)
 
 if(NOT IRImager_mock)
   find_package(IRImager)
