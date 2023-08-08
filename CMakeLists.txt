@@ -82,7 +82,11 @@ set_target_properties(irimager PROPERTIES
     "src/nqm/irimager/irimager_class.hpp;${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
   CXX_VISIBILITY_PRESET "hidden"
 )
-target_link_libraries(irimager PRIVATE pybind11::headers spdlog::spdlog)
+target_link_libraries(irimager
+  PRIVATE
+    pybind11::headers
+    spdlog::spdlog_header_only # less efficient, but avoids CXX11 ABI issues
+)
 
 if(NOT IRImager_mock)
   find_package(IRImager)
