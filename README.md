@@ -87,6 +87,5 @@ documentation in the `docs/` directory.
 automatically parses Google-style Python docstrings.
 
 ```bash
-pdm run .venv/bin/sphinx-apidoc --implicit-namespaces -o docs/apidoc src/nqm/
-pdm run .venv/bin/sphinx-build -M html docs/ build/
+pdm run sphinx-build -M html docs/ build/
 ```
