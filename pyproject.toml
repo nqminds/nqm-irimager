@@ -70,6 +70,9 @@ docs = [
     "sphinx>=5.3.0",
     "myst-parser >=0.18.1, <0.19.0",
 ]
+cibuildwheel = [
+    "cibuildwheel>=2.15.0, <3.0.0",
+]
 
 [tool.cibuildwheel]
 build = "cp*-manylinux_*" # any standard CPython Linux

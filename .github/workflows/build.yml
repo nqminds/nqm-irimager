@@ -21,14 +21,16 @@ jobs:
     outputs:
       include: ${{ steps.set-matrix.outputs.include }}
     steps:
-      - name: Install Dependencies
-        run: |
-          pip3 install cibuildwheel
       - uses: actions/checkout@v3
+      - name: Install pdm
+        run: pipx install pdm
+      - name: Install cibuildwheel
+        run: |
+          pdm install --group cibuildwheel --no-default
       - id: set-matrix
         run: |
             echo "include=$(
-              cibuildwheel --print-build-identifiers --platform linux \
+              pdm run cibuildwheel --print-build-identifiers --platform linux \
               | jq -Rc '{"only": inputs, "os": "ubuntu-latest"}' \
               | jq -sc
             )" >> "$GITHUB_OUTPUT"
@@ -67,10 +69,14 @@ jobs:
         with:
           platforms: all
 
+      - name: Install pdm
+        run: pipx install pdm
+      - name: Install cibuildwheel
+        run: |
+          pdm install --group cibuildwheel --no-default
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.14.1
-        with:
-          only: ${{ matrix.only }}
+        run: |
+          pdm run cibuildwheel --only '${{ matrix.only }}'
         env:
           # in cibuildwheel environment, the `/host` folder contains the
           # host file system
