@@ -2,7 +2,9 @@
 name = "nqm.irimager"
 version = "0.1.0a0" # equivalent to 0.1.0-alpha.0
 description = "Python module for interfacing with EvoCortex IRImagerDirect SDK"
-requires-python = ">=3.8, <4.0"
+# Python 3.12 removes distutils, which seems to break stuff
+# and prevents installing this package, see https://peps.python.org/pep-0632
+requires-python = ">=3.8, <3.12"
 authors = [
     { name = "Alois Klink", email = "alois@nquiringminds.com" }
 ]
