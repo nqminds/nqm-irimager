@@ -23,6 +23,12 @@ project(
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+# CMake Package Manager
+include(CPM)
+CPMUsePackageLock(package-lock.cmake)
+
+CPMGetPackage(spdlog)
+
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 find_package(pybind11 CONFIG REQUIRED)
 
@@ -52,7 +58,7 @@ set_target_properties(irimager PROPERTIES
     "src/nqm/irimager/irimager_class.hpp;${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
   CXX_VISIBILITY_PRESET "hidden"
 )
-target_link_libraries(irimager PRIVATE pybind11::headers)
+target_link_libraries(irimager PRIVATE pybind11::headers spdlog::spdlog)
 
 if(NOT IRImager_mock)
   find_package(IRImager)

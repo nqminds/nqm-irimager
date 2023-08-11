@@ -1,4 +1,5 @@
 #include "./irimager_class.hpp"
+#include "spdlog/spdlog.h"
 
 struct IRImager::impl final {
     bool streaming = false;
@@ -6,13 +7,19 @@ struct IRImager::impl final {
     ~impl() = default;
 };
 
-IRImager::IRImager(): pImpl{std::make_unique<IRImager::impl>()} {};
+IRImager::IRImager(): pImpl{std::make_unique<IRImager::impl>()} {
+    spdlog::warn("Creating a MOCKED IRImager object!");
+};
 
-IRImager::IRImager(const IRImager& other): pImpl{std::make_unique<IRImager::impl>(*other.pImpl)} {};
+IRImager::IRImager(const IRImager& other): pImpl{std::make_unique<IRImager::impl>(*other.pImpl)} {
+    spdlog::warn("Creating a MOCKED IRImager object!");
+};
 
 IRImager::IRImager(IRImager&& other) = default;
 
 IRImager::IRImager(const std::filesystem::path &xml_path) {
+    spdlog::warn("Creating a MOCKED IRImager object!");
+
     std::ifstream xml_stream(xml_path, std::fstream::in);
 
     std::string xml_header(5, '\0');
