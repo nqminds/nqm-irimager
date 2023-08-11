@@ -50,6 +50,7 @@ python_add_library(irimager MODULE
 set_target_properties(irimager PROPERTIES
   PRIVATE_HEADER
     "src/nqm/irimager/irimager_class.hpp;${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
+  CXX_VISIBILITY_PRESET "hidden"
 )
 target_link_libraries(irimager PRIVATE pybind11::headers)
 
