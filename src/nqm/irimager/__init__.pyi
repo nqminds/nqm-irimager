@@ -18,6 +18,12 @@ import numpy.typing as npt
 # TODO: replace with PEP 673 typing.Self once we support Python 3.11
 _SelfIRImager = typing.TypeVar("_SelfIRImager", bound="IRImager")
 
+__version__: str
+"""`nqm.irimager` version.
+
+This is *not* the version of the underlying C++ libirimager library.
+"""
+
 class IRImager:
     """IRImager object - interfaces with a camera."""
 

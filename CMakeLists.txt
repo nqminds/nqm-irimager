@@ -69,8 +69,8 @@ endif(NOT IRImager_mock)
 
 target_compile_features(irimager PRIVATE cxx_std_17)
 target_compile_definitions(irimager PRIVATE
-  VERSION_INFO=${PROJECT_VERSION}
   DOCSTRINGS_H="${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
+  SKBUILD_PROJECT_VERSION="${SKBUILD_PROJECT_VERSION}"
 )
 
 install(TARGETS irimager DESTINATION "nqm")

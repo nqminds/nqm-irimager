@@ -11,6 +11,10 @@
 #error DOCSTRINGS_H must be defined to the output of pybind11_mkdocs
 #endif
 
+#ifndef SKBUILD_PROJECT_VERSION
+#error SKBUILD_PROJECT_VERSION must be defined as the Python package version
+#endif
+
 #include DOCSTRINGS_H
 
 PYBIND11_MODULE(irimager, m) {
@@ -19,6 +23,8 @@ PYBIND11_MODULE(irimager, m) {
 We use the IRImagerDirect SDK
 (see http://documentation.evocortex.com/libirimager2/html/index.html)
 to control these cameras.)";
+
+    m.attr("__version__") = SKBUILD_PROJECT_VERSION;
 
     pybind11::class_<IRImager>(m, "IRImager", DOC(IRImager))
         .def(pybind11::init<>())
