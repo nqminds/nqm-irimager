@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: MIT
+#
+# SPDX-FileCopyrightText: Copyright (c) 2019-2022 Lars Melchior and contributors
+
 set(CPM_DOWNLOAD_VERSION 0.38.2)
 
 if(CPM_SOURCE_CACHE)
