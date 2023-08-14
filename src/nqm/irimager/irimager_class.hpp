@@ -6,8 +6,7 @@
 #include <string_view>
 
 #include <pybind11/numpy.h>
-
-#include "./propogate_const.hpp"
+#include "propagate_const.h"
 
 /**
  * IRImager object - interfaces with a camera.
@@ -93,7 +92,7 @@ class IRImager {
     struct impl;
 protected:
     // pImpl, see https://en.cppreference.com/w/cpp/language/pimpl
-    propagate_const<std::unique_ptr<impl>> pImpl;
+    std::experimental::fundamentals_v2::propagate_const<std::unique_ptr<impl>> pImpl;
 
     /**
      * Uninitialized constructor, should only be used in inheritance.

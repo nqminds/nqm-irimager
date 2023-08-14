@@ -28,6 +28,7 @@ include(CPM)
 CPMUsePackageLock(package-lock.cmake)
 
 CPMGetPackage(spdlog)
+CPMGetPackage(propagate_const)
 
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 find_package(pybind11 CONFIG REQUIRED)
@@ -84,6 +85,7 @@ target_link_libraries(irimager
   PRIVATE
     pybind11::headers
     spdlog::spdlog_header_only # less efficient, but avoids CXX11 ABI issues
+    propagate_const::propagate_const
 )
 
 if(IRImager_mock)
