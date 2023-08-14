@@ -31,7 +31,7 @@ to control these cameras.)";
         .def(pybind11::init<const std::filesystem::path &>(), DOC(IRImager, IRImager, 2))
         .def("get_frame", &IRImager::get_frame, DOC(IRImager, get_frame))
         .def("get_temp_range_decimal", &IRImager::get_temp_range_decimal, DOC(IRImager, get_temp_range_decimal))
-        .def_static("get_library_version", &IRImager::get_library_version, DOC(IRImager, get_library_version))
+        .def("get_library_version", &IRImager::get_library_version, DOC(IRImager, get_library_version))
         .def("start_streaming", &IRImager::start_streaming, DOC(IRImager, start_streaming))
         .def("stop_streaming", &IRImager::stop_streaming, DOC(IRImager, stop_streaming))
         .def("__enter__", &IRImager::_enter_, pybind11::return_value_policy::reference_internal)

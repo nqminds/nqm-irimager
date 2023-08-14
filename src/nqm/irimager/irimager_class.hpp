@@ -91,7 +91,7 @@ class IRImager {
      * @returns the version of the libirmager library, or "MOCKED" if the
      * library has been mocked.
      */
-    static std::string_view get_library_version();
+    std::string_view get_library_version();
 
 private:
     /** pImpl implementation */
