@@ -55,14 +55,14 @@ std::tuple<
         throw std::runtime_error("IRIMAGER_STREAMOFF: Not streaming");
     }
 
-    auto frame_size = std::array<ssize_t, 2>{128, 128};
+    auto frame_size = std::array<ssize_t, 2>{382, 288};
     auto my_array = pybind11::array_t<uint16_t>(frame_size);
 
     auto r = my_array.mutable_unchecked<frame_size.size()>();
 
     for (ssize_t i = 0; i < frame_size[0]; i++) {
         for (ssize_t j = 0; j < frame_size[1]; j++) {
-            r(i, j) = 1800 * std::pow(10, get_temp_range_decimal());
+            r(i, j) = (1800 + 100) * std::pow(10, get_temp_range_decimal());
         }
     }
 
