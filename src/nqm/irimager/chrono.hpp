@@ -10,6 +10,29 @@ namespace nqm {
 namespace irimager {
 
 /**
+ * Converts from `steady_clock` to `system_clock`.
+ *
+ * Converts a time_point from std::chrono::steady_clock (time since last boot)
+ * to std::chrono::system_clock (aka time since UNIX epoch).
+ *
+ * C++20 has a function called std::chrono::clock_cast that will do this
+ * for us, but we're stuck on C++17, so instead we have to do this imprecise
+ * monstrosity to do the conversion.
+ *
+ * @remarks
+ * This function is imprecise!!! Calling it multiple times with the same data
+ * will result in different results.
+ */
+inline std::chrono::time_point<std::chrono::system_clock> clock_cast(
+    const std::chrono::time_point<std::chrono::steady_clock>
+        &steady_time_point) {
+  auto sys_now = std::chrono::system_clock::now();
+  auto sdy_now = std::chrono::steady_clock::now();
+  return std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+      steady_time_point - sdy_now + sys_now);
+}
+
+/**
  * Finds the next whole second.
  */
 inline std::chrono::time_point<std::chrono::system_clock> next_second(

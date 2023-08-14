@@ -78,15 +78,20 @@ class IRImager {
   void stop_streaming();
 
   /**
-   * Return a frame
+   * Return a frame.
+   *
+   * If the shutter is down
+   * (normally done automatically by the thermal camera for calibration),
+   * this function will wait until the shutter is back up, before returning
+   * (usually around ~1s).
    *
    * @throws RuntimeError if a frame cannot be loaded,
-   *   e.g. if the camera isn't streaming.
+   *                      e.g. if the camera isn't streaming.
    *
    * @returns A tuple containing:
    *         1. A 2-D matrix containing the image. This must be adjusted
    *           by :py:meth:`~IRImager.get_temp_range_decimal` to get the
-   *           actual temperature in degrees Celcius.
+   *           actual temperature in degrees Celcius, offset from -100 ℃.
    *         2. The time the image was taken.
    */
   std::tuple<ThermalFrame, std::chrono::system_clock::time_point> get_frame();

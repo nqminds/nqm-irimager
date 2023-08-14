@@ -17,6 +17,12 @@ Python module for interfacing with [EvoCortex IRImagerDirect SDK][1].
 (known as `libirimager`). Please follow the instructions on their webpage to
 install the package.
 
+You will also need to
+- Download calibration data using `sudo ir_download_calibration`, see
+  <http://documentation.evocortex.com/libirimager2/html/Installation.html#subsec_download>
+- Create an XML configuration file using `ir_generate_configuration`, see
+  <http://documentation.evocortex.com/libirimager2/html/Installation.html#subsec_config>
+
 It's possible to install a mocked version of `nqm.irimager` for testing
 by defining `SKBUILD_CMAKE_DEFINE='IRImager_mock=ON'` whiling building
 `nqm.irimager`.
@@ -33,9 +39,13 @@ We recommend using [PDM](https://pdm.fming.dev/latest/) for local development.
 pdm install
 ```
 
-### Usage
+## Usage example
+
+See documentation for the full API reference, but using this library is as
+easy as:
 
 ```python
+import datetime
 import logging
 from nqm.irimager import IRImager, Logger
 
@@ -47,11 +57,15 @@ logger = Logger()
 XML_CONFIG = "tests/__fixtures__/382x288@27Hz.xml"
 irimager = IRImager(XML_CONFIG)
 with irimager:
+    print(f"Started at {datetime.datetime.now()}")
     while True: # press CTRL+C to stop this program
-        array, timestamp = irimager.get_frame()
+        try:
+          array, timestamp = irimager.get_frame()
+        except error:
+          print(f"Stopped at {datetime.datetime.now()}")
+          raise error
         frame_in_celsius = array / (10 ** irimager.get_temp_range_decimal()) - 100
         print(f"At {timestamp}: Average temperature is {frame_in_celsius.mean()}")
-        break
 
 del logger # to stop
 ```
