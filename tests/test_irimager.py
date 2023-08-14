@@ -69,3 +69,8 @@ def test_irimager_get_temp_range_decimal():
 
     assert irimager.get_temp_range_decimal() >= 0
     assert isinstance(irimager.get_temp_range_decimal(), int)
+
+
+def test_irimager_get_library_version():
+    """Tests that nqm.irimager.IRImager#get_library_version returns a string"""
+    assert isinstance(IRImager.get_library_version(), str)
