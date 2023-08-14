@@ -16,13 +16,32 @@ env:
   libirmager_arches: 'amd64 arm64'
 
 jobs:
+  build_wheels_matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      include: ${{ steps.set-matrix.outputs.include }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install pdm
+        run: pipx install pdm
+      - name: Install cibuildwheel
+        run: |
+          pdm install --group cibuildwheel --no-default
+      - id: set-matrix
+        run: |
+            echo "include=$(
+              pdm run cibuildwheel --print-build-identifiers --platform linux \
+              | jq -Rc '{"only": inputs, "os": "ubuntu-latest"}' \
+              | jq -sc
+            )" >> "$GITHUB_OUTPUT"
+
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    name: Build ${{ matrix.os }} ${{ matrix.only }}
+    needs: build_wheels_matrix
     strategy:
       matrix:
-        os:
-          - ubuntu-22.04
+        include: ${{ fromJson(needs.build_wheels_matrix.outputs.include) }}
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v3
@@ -50,8 +69,14 @@ jobs:
         with:
           platforms: all
 
+      - name: Install pdm
+        run: pipx install pdm
+      - name: Install cibuildwheel
+        run: |
+          pdm install --group cibuildwheel --no-default
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.14.1
+        run: |
+          pdm run cibuildwheel --only '${{ matrix.only }}'
         env:
           # in cibuildwheel environment, the `/host` folder contains the
           # host file system
