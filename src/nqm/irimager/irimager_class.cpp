@@ -2,62 +2,63 @@
 #include "spdlog/spdlog.h"
 
 struct IRImager::impl {
-impl() = default;
-impl(const std::filesystem::path &xml_path) {
-    // do a basic check that the given file is readable, and is an XML file
-    auto xml_stream = std::ifstream(xml_path, std::fstream::in);
-    auto xml_header = std::string(5, '\0');
+public:
+    impl() = default;
+    impl(const std::filesystem::path &xml_path) {
+        // do a basic check that the given file is readable, and is an XML file
+        auto xml_stream = std::ifstream(xml_path, std::fstream::in);
+        auto xml_header = std::string(5, '\0');
 
-    xml_stream.read(xml_header.data(), static_cast<std::streamsize>(xml_header.size()));
-    if (xml_header != std::string("<?xml")) {
-        throw std::runtime_error("Invalid XML file: The given XML file does not start with '<?xml'");
-    }
-}
-
-/** @copydoc IRImager::start_streaming() */
-virtual void start_streaming() {
-    streaming = true;
-}
-
-/** @copydoc IRImager::stop_streaming() */
-virtual void stop_streaming() {
-    streaming = false;
-}
-
-/** @copydoc IRImager::get_frame() */
-virtual std::tuple<
-    pybind11::array_t<uint16_t>,
-    std::chrono::system_clock::time_point
-> get_frame() {
-    if (!streaming) {
-        throw std::runtime_error("IRIMAGER_STREAMOFF: Not streaming");
-    }
-
-    auto frame_size = std::array<ssize_t, 2>{382, 288};
-    auto my_array = pybind11::array_t<uint16_t>(frame_size);
-
-    auto r = my_array.mutable_unchecked<frame_size.size()>();
-
-    for (ssize_t i = 0; i < frame_size[0]; i++) {
-        for (ssize_t j = 0; j < frame_size[1]; j++) {
-            r(i, j) = static_cast<uint16_t>(
-                (1800 + 100) * std::pow(10, get_temp_range_decimal())
-            );
+        xml_stream.read(xml_header.data(), static_cast<std::streamsize>(xml_header.size()));
+        if (xml_header != std::string("<?xml")) {
+            throw std::runtime_error("Invalid XML file: The given XML file does not start with '<?xml'");
         }
     }
 
-    return std::make_tuple(my_array, std::chrono::system_clock::now());
-}
+    /** @copydoc IRImager::start_streaming() */
+    virtual void start_streaming() {
+        streaming = true;
+    }
 
-/** @copydoc IRImager::get_temp_range_decimal() */
-virtual short get_temp_range_decimal() {
-    return 1;
-}
+    /** @copydoc IRImager::stop_streaming() */
+    virtual void stop_streaming() {
+        streaming = false;
+    }
 
-/** @copydoc IRImager::get_library_version() */
-virtual std::string_view get_library_version() = 0;
+    /** @copydoc IRImager::get_frame() */
+    virtual std::tuple<
+        pybind11::array_t<uint16_t>,
+        std::chrono::system_clock::time_point
+    > get_frame() {
+        if (!streaming) {
+            throw std::runtime_error("IRIMAGER_STREAMOFF: Not streaming");
+        }
 
-virtual ~impl() = default;
+        auto frame_size = std::array<ssize_t, 2>{382, 288};
+        auto my_array = pybind11::array_t<uint16_t>(frame_size);
+
+        auto r = my_array.mutable_unchecked<frame_size.size()>();
+
+        for (ssize_t i = 0; i < frame_size[0]; i++) {
+            for (ssize_t j = 0; j < frame_size[1]; j++) {
+                r(i, j) = static_cast<uint16_t>(
+                    (1800 + 100) * std::pow(10, get_temp_range_decimal())
+                );
+            }
+        }
+
+        return std::make_tuple(my_array, std::chrono::system_clock::now());
+    }
+
+    /** @copydoc IRImager::get_temp_range_decimal() */
+    virtual short get_temp_range_decimal() {
+        return 1;
+    }
+
+    /** @copydoc IRImager::get_library_version() */
+    virtual std::string_view get_library_version() = 0;
+
+    virtual ~impl() = default;
 
 protected:
     bool streaming = false;
