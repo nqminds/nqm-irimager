@@ -4,7 +4,7 @@
 FindLibUsb
 -----------
 
-Find LibUsb, the Linux userspace USB programming library.
+Find LibUsb-1.0, the Linux userspace USB programming library.
 
 Imported Targets
 ^^^^^^^^^^^^^^^^
@@ -32,10 +32,10 @@ This module will set the following variables in your project:
 cmake_minimum_required(VERSION 3.15...3.26)
 
 find_package(PkgConfig QUIET)
-pkg_check_modules(PC_LibUsb QUIET libusb IMPORTED_TARGET)
+pkg_check_modules(PC_LibUsb QUIET libusb-1.0 IMPORTED_TARGET)
 
-find_path(LibUsb_INCLUDE_DIRS NAMES usb.h HINTS "${PC_LibUsb_INCLUDE_DIRS}")
-find_library(LibUsb_LIBRARIES NAMES usb HINTS "${PC_LibUsb_LIBRARY_DIRS}")
+find_path(LibUsb_INCLUDE_DIRS NAMES libusb-1.0/libusb.h usb.h HINTS "${PC_LibUsb_INCLUDE_DIRS}")
+find_library(LibUsb_LIBRARIES NAMES usb-1.0 HINTS "${PC_LibUsb_LIBRARY_DIRS}")
 
 set(LibUsb_VERSION "${PC_LibUsb_VERSION}")
 
