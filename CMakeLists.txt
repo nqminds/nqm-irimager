@@ -89,7 +89,7 @@ target_link_libraries(irimager
 if(IRImager_mock)
   target_compile_definitions(irimager PRIVATE IR_IMAGER_MOCK)
 else()
-  find_package(IRImager)
+  find_package(IRImager 4.0...5.0)
 
   if(NOT IRImager_FOUND)
     message(FATAL_ERROR "libirimager was not found. \
