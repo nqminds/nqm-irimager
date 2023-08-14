@@ -47,6 +47,30 @@ add_custom_command(
 
 set(IRImager_mock OFF CACHE BOOL "If set, use a mock IRImager implementation that mocks an OPTIS IR camera")
 
+add_compile_options(
+  # Error on all C/C++ warnings if making a Debug build
+  $<$<CONFIG:Debug>:-Werror>
+  -Wall
+  -Wextra
+  -Wpedantic
+  -Wconversion
+  -Wsign-conversion
+  -Wcast-qual
+  -Wformat=2
+  -Wundef
+  -Werror=float-equal
+  -Wshadow
+  -Wcast-align
+  -Wunused
+  -Wnull-dereference
+  -Wdouble-promotion
+  -Wimplicit-fallthrough
+  $<$<COMPILE_LANGUAGE:CXX>:-Wextra-semi>
+  $<$<COMPILE_LANGUAGE:CXX>:-Woverloaded-virtual>
+  $<$<COMPILE_LANGUAGE:CXX>:-Wnon-virtual-dtor>
+  $<$<COMPILE_LANGUAGE:CXX>:-Wold-style-cast>
+)
+
 python_add_library(irimager MODULE
   "src/nqm/irimager/irimager.cpp"
   "$<IF:$<BOOL:${IRImager_mock}>,src/nqm/irimager/irimager_mock.cpp,src/nqm/irimager/irimager_class.cpp>"

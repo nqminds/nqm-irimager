@@ -20,10 +20,11 @@ IRImager::IRImager(IRImager&& other) = default;
 IRImager::IRImager(const std::filesystem::path &xml_path) {
     spdlog::warn("Creating a MOCKED IRImager object!");
 
-    std::ifstream xml_stream(xml_path, std::fstream::in);
+    // do a basic check that the given file is readable, and is an XML file
+    auto xml_stream = std::ifstream(xml_path, std::fstream::in);
+    auto xml_header = std::string(5, '\0');
 
-    std::string xml_header(5, '\0');
-    xml_stream.read(xml_header.data(), xml_header.size());
+    xml_stream.read(xml_header.data(), static_cast<std::streamsize>(xml_header.size()));
     if (xml_header != std::string("<?xml")) {
         throw std::runtime_error("Invalid XML file: The given XML file does not start with '<?xml'");
     }
@@ -67,7 +68,9 @@ std::tuple<
 
     for (ssize_t i = 0; i < frame_size[0]; i++) {
         for (ssize_t j = 0; j < frame_size[1]; j++) {
-            r(i, j) = (1800 + 100) * std::pow(10, get_temp_range_decimal());
+            r(i, j) = static_cast<uint16_t>(
+                (1800 + 100) * std::pow(10, get_temp_range_decimal())
+            );
         }
     }
 
