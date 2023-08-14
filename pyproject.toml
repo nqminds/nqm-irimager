@@ -26,7 +26,7 @@ build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
 wheel.packages = [ "src/nqm" ]
-wheel.license-files = [ "LICENSES/*" ]
+wheel.license-files = [ "LICENSES/*", "docs/licenses.rst" ]
 cmake.targets = ["irimager", "cpm-update-package-lock"]
 
 [tool.pylint.main]

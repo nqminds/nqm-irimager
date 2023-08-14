@@ -6,7 +6,7 @@ groups = ["default", "test", "lint", "types", "docs", "cibuildwheel"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:f657f4c30a7608cec346eddbf06af7d9dc6656fd2820a86e470950f350e8c2a3"
+content_hash = "sha256:3a45fa5b48e41e847b0ff95296d26adf4dfae10bee29650274a0678e9dcb3a80"
 
 [[package]]
 name = "alabaster"

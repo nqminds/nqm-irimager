@@ -26,6 +26,11 @@ API Documentation
 
    apidoc/modules
 
+.. toctree::
+   :hidden:
+
+   licenses
+
 Indices and tables
 ==================
 
