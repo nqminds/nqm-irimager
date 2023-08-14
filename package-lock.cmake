@@ -31,4 +31,10 @@ CPMDeclarePackage(eigen
   VERSION 3.4.0
   SYSTEM ON
   EXCLUDE_FROM_ALL TRUE URL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 URL_HASH SHA3_256=652266ca1f8c15663076d21be840a85910ae4071453b2a1aa6f6a55ea22daddf
+# uvw
+CPMDeclarePackage(uvw
+  NAME uvw
+  VERSION 3.2.0
+  SYSTEM YES
+  uvw URL https://github.com/skypjack/uvw/archive/refs/tags/v3.2.0_libuv_v1.46.tar.gz URL_HASH SHA3_256=0b82039ac6fcff490caeb85b77408eb925146690cb812c4e9303757263d8ce12 EXCLUDE_FROM_ALL YES
 )

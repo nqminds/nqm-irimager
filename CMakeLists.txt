@@ -34,6 +34,7 @@ CPMGetPackage(googletest)
 CPMGetPackage(spdlog)
 CPMGetPackage(propagate_const)
 CPMGetPackage(eigen)
+CPMGetPackage(uvw)
 
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 find_package(pybind11 CONFIG REQUIRED)
