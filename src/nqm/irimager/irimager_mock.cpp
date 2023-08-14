@@ -46,8 +46,8 @@ IRImager* IRImager::_enter_() {
 
 void IRImager::_exit_(
     [[maybe_unused]] const std::optional<pybind11::type> &exc_type,
-    [[maybe_unused]] const std::optional<pybind11::error_already_set> &exc_value,
-    [[maybe_unused]] const pybind11::object &traceback) {
+    [[maybe_unused]] const std::optional<pybind11::object> &exc_value,
+    [[maybe_unused]] const std::optional<pybind11::object> &traceback) {
 
     stop_streaming();
 }
