@@ -69,3 +69,10 @@ class IRImager:
             the version of the libirmager library, or "MOCKED" if the library
             has been mocked.
         """
+
+class IRImagerMock(IRImager):
+    """Mocked version of IRImager.
+
+    This class can be used to return dummy data when there isn't a camera
+    connected (e.g. for testing).
+    """

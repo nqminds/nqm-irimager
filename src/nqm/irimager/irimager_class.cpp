@@ -158,3 +158,7 @@ short IRImager::get_temp_range_decimal() {
 std::string_view IRImager::get_library_version() {
     return pImpl->get_library_version();
 }
+
+IRImagerMock::IRImagerMock(const std::filesystem::path &xml_path) {
+    pImpl = std::make_unique<IRImagerMockImpl>(xml_path);
+}

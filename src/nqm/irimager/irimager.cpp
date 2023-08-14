@@ -35,4 +35,13 @@ to control these cameras.)";
         .def("stop_streaming", &IRImager::stop_streaming, DOC(IRImager, stop_streaming))
         .def("__enter__", &IRImager::_enter_, pybind11::return_value_policy::reference_internal)
         .def("__exit__", &IRImager::_exit_);
+
+    pybind11::class_<IRImagerMock, IRImager>(m, "IRImagerMock", DOC(IRImagerMock))
+        .def(pybind11::init<const std::filesystem::path &>(), DOC(IRImager, IRImager))
+        .def("get_frame", &IRImagerMock::get_frame, DOC(IRImager, get_frame))
+        .def("get_temp_range_decimal", &IRImagerMock::get_temp_range_decimal, DOC(IRImager, get_temp_range_decimal))
+        .def("start_streaming", &IRImagerMock::start_streaming, DOC(IRImager, start_streaming))
+        .def("stop_streaming", &IRImagerMock::stop_streaming, DOC(IRImager, stop_streaming))
+        .def("__enter__", &IRImagerMock::_enter_, pybind11::return_value_policy::reference_internal)
+        .def("__exit__", &IRImagerMock::_exit_);
 }

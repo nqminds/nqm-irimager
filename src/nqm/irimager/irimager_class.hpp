@@ -100,3 +100,14 @@ protected:
      */
     IRImager();
 };
+
+/**
+ * Mocked version of IRImager.
+ *
+ * This class can be used to return dummy data when there isn't a camera
+ * connected (e.g. for testing).
+ */
+class IRImagerMock: public IRImager {
+public:
+    IRImagerMock(const std::filesystem::path &xml_path);
+};

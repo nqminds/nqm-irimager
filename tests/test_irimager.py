@@ -5,7 +5,7 @@ import pathlib
 import numpy as np
 import pytest
 
-from nqm.irimager import IRImager
+from nqm.irimager import IRImagerMock as IRImager
 
 XML_FILE = pathlib.Path(__file__).parent / "__fixtures__" / "382x288@27Hz.xml"
 
