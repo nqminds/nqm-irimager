@@ -27,8 +27,7 @@ to control these cameras.)";
     m.attr("__version__") = SKBUILD_PROJECT_VERSION;
 
     pybind11::class_<IRImager>(m, "IRImager", DOC(IRImager))
-        .def(pybind11::init<>())
-        .def(pybind11::init<const std::filesystem::path &>(), DOC(IRImager, IRImager, 2))
+        .def(pybind11::init<const std::filesystem::path &>(), DOC(IRImager, IRImager))
         .def("get_frame", &IRImager::get_frame, DOC(IRImager, get_frame))
         .def("get_temp_range_decimal", &IRImager::get_temp_range_decimal, DOC(IRImager, get_temp_range_decimal))
         .def("get_library_version", &IRImager::get_library_version, DOC(IRImager, get_library_version))

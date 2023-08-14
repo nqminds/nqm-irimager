@@ -113,7 +113,7 @@ private:
 #define IRImagerDefaultImplementation IRImagerRealImpl
 #endif /* ifdef IR_IMAGER_MOCK */
 
-IRImager::IRImager(): pImpl{std::make_unique<IRImagerDefaultImplementation>()} {};
+IRImager::IRImager() = default;
 
 IRImager::IRImager(const IRImager& other): pImpl{std::make_unique<IRImagerDefaultImplementation>(*other.pImpl)} {}
 

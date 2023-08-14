@@ -15,10 +15,6 @@
 class IRImager {
     public:
     /**
-     * Default constructor.
-     */
-    IRImager();
-    /**
      * Copies and existing IRImager object.
      */
     IRImager(const IRImager&);
@@ -95,7 +91,12 @@ class IRImager {
 
     /** pImpl implementation */
     struct impl;
-private:
+protected:
     // pImpl, see https://en.cppreference.com/w/cpp/language/pimpl
     propagate_const<std::unique_ptr<impl>> pImpl;
+
+    /**
+     * Uninitialized constructor, should only be used in inheritance.
+     */
+    IRImager();
 };

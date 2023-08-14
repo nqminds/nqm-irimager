@@ -27,9 +27,6 @@ This is *not* the version of the underlying C++ libirimager library.
 class IRImager:
     """IRImager object - interfaces with a camera."""
 
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
     def __init__(self, xml_path: os.PathLike) -> None:
         """Loads the configuration for an IR Camera from the given XML file"""
     def start_streaming(self) -> None:
