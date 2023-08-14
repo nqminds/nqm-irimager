@@ -73,7 +73,7 @@ add_compile_options(
 
 python_add_library(irimager MODULE
   "src/nqm/irimager/irimager.cpp"
-  "$<IF:$<BOOL:${IRImager_mock}>,src/nqm/irimager/irimager_mock.cpp,src/nqm/irimager/irimager_class.cpp>"
+  "src/nqm/irimager/irimager_class.cpp"
   "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
   WITH_SOABI
 )
@@ -84,7 +84,9 @@ set_target_properties(irimager PROPERTIES
 )
 target_link_libraries(irimager PRIVATE pybind11::headers spdlog::spdlog)
 
-if(NOT IRImager_mock)
+if(IRImager_mock)
+  target_compile_definitions(irimager PRIVATE IR_IMAGER_MOCK)
+else()
   find_package(IRImager)
 
   if(NOT IRImager_FOUND)
@@ -96,7 +98,7 @@ if(NOT IRImager_mock)
   endif()
 
   target_link_libraries(irimager PRIVATE IRImager::IRImager)
-endif(NOT IRImager_mock)
+endif(IRImager_mock)
 
 target_compile_features(irimager PRIVATE cxx_std_17)
 target_compile_definitions(irimager PRIVATE

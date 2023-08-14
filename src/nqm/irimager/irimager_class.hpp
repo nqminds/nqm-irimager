@@ -93,9 +93,9 @@ class IRImager {
      */
     std::string_view get_library_version();
 
-private:
     /** pImpl implementation */
     struct impl;
+private:
     // pImpl, see https://en.cppreference.com/w/cpp/language/pimpl
     propagate_const<std::unique_ptr<impl>> pImpl;
 };
