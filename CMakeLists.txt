@@ -71,16 +71,14 @@ add_compile_options(
   $<$<COMPILE_LANGUAGE:CXX>:-Wold-style-cast>
 )
 
-python_add_library(irimager MODULE
+pybind11_add_module(irimager MODULE
   "src/nqm/irimager/irimager.cpp"
   "src/nqm/irimager/irimager_class.cpp"
   "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
-  WITH_SOABI
 )
 set_target_properties(irimager PROPERTIES
   PRIVATE_HEADER
     "src/nqm/irimager/irimager_class.hpp;${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
-  CXX_VISIBILITY_PRESET "hidden"
 )
 target_link_libraries(irimager
   PRIVATE
