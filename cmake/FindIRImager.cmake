@@ -49,6 +49,9 @@ This module uses the following cache variables:
   The location of the IRCore library file.
 ``IRImager_INCLUDE_DIR``
   The location of the IRImager include directory containing `libirimager/IR*.h`.
+``IRImager_VERSION``
+  The version of the IRImager library. This requires compiling and running
+  a small test program, so this value will not be set when cross-compiling.
 
 The cache variables should not be used by project code.
 They may be set by end users to point at IRImager components.
@@ -79,6 +82,42 @@ find_library(IRImager_IRCore_LIBRARY
 mark_as_advanced(IRImager_IRCore_LIBRARY)
 
 #-----------------------------------------------------------------------------
+#---       Try to find libirimager version by calling getVersion()         ---
+
+if(IRImager_IRCore_LIBRARY AND IRImager_IRImageProcessing_LIBRARY AND IRImager_LIBRARY AND IRImager_INCLUDE_DIR)
+  file(
+    WRITE
+    "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/get-irimager-version.cpp"
+    [=[
+    #include <iostream>
+    #include <libirimager/IRImager.h>
+
+    int main() {
+      std::cout << evo::IRImager::getVersion();
+    }
+    ]=]
+  )
+
+  # won't run when cross-compiling without an emulator
+  try_run(
+    _IRImager_getVersion_run_result
+    _IRImager_getVersion_compile_result
+    "${CMAKE_BINARY_DIR}"
+    "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/get-irimager-version.cpp"
+    COMPILE_DEFINITIONS "-D_GLIBCXX_USE_CXX11_ABI=0"
+    LINK_LIBRARIES
+      "${IRImager_LIBRARY}"
+      "${IRImager_IRImageProcessing_LIBRARY}"
+      "${IRImager_IRCore_LIBRARY}"
+      UDev::UDev
+      LibUsb::LibUsb
+    CMAKE_FLAGS
+      "-DINCLUDE_DIRECTORIES:STRING=${IRImager_INCLUDE_DIR}"
+    RUN_OUTPUT_VARIABLE IRImager_VERSION
+  )
+endif()
+
+#-----------------------------------------------------------------------------
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(IRImager
   FOUND_VAR IRImager_FOUND
@@ -87,6 +126,8 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(IRImager
     IRImager_INCLUDE_DIR
     IRImager_IRImageProcessing_LIBRARY
     IRImager_IRCore_LIBRARY
+  VERSION_VAR
+    IRImager_VERSION
   )
 set(IRImager_FOUND "${IRImager_FOUND}")
 
