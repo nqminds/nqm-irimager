@@ -31,6 +31,12 @@ CPMDeclarePackage(eigen
   VERSION 3.4.0
   SYSTEM ON
   EXCLUDE_FROM_ALL TRUE URL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 URL_HASH SHA3_256=652266ca1f8c15663076d21be840a85910ae4071453b2a1aa6f6a55ea22daddf
+# libuv
+CPMDeclarePackage(libuv
+  NAME libuv
+  VERSION 1.46.0
+  libuv URL https://dist.libuv.org/dist/v1.46.0/libuv-v1.46.0.tar.gz URL_HASH SHA3_256=c86dec4e9905d930302deb85e9ffa616dd7cdca4439acb35edba246cf3725d88 EXCLUDE_FROM_ALL YES
+)
 # uvw
 CPMDeclarePackage(uvw
   NAME uvw

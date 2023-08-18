@@ -125,6 +125,41 @@ The `Eigen`_ C++ template library for linear algebra is used under the
   Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with
   this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+libuv
+-----
+
+`libuv`_ is used under the **MIT** license.
+
+  Copyright (c) 2015-present libuv project contributors.
+  Copyright Joyent, Inc. and other Node contributors. All rights reserved.
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+Some parts of libuv may also be used under additional licenses, please see
+`libuv's LICENSE-extra file`_:
+
+* **BSD-2-Clause** license (copyright Niels Provos)
+* **ISC** license (copyright Internet Systems Consortium, Inc.)
+
+.. _libuv: https://libuv.org/
+.. _`libuv's LICENSE-extra file`: https://github.com/libuv/libuv/blob/65541f772f7209d8273395fb3e99ea0f0bbfb73e/LICENSE-extra
+
 uvw
 ---
 

@@ -34,6 +34,7 @@ CPMGetPackage(googletest)
 CPMGetPackage(spdlog)
 CPMGetPackage(propagate_const)
 CPMGetPackage(eigen)
+CPMGetPackage(libuv)
 CPMGetPackage(uvw)
 
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
