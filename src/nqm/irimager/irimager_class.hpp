@@ -15,10 +15,6 @@
 class IRImager {
     public:
     /**
-     * Default constructor.
-     */
-    IRImager();
-    /**
      * Copies and existing IRImager object.
      */
     IRImager(const IRImager&);
@@ -91,11 +87,27 @@ class IRImager {
      * @returns the version of the libirmager library, or "MOCKED" if the
      * library has been mocked.
      */
-    static std::string_view get_library_version();
+    std::string_view get_library_version();
 
-private:
     /** pImpl implementation */
     struct impl;
+protected:
     // pImpl, see https://en.cppreference.com/w/cpp/language/pimpl
     propagate_const<std::unique_ptr<impl>> pImpl;
+
+    /**
+     * Uninitialized constructor, should only be used in inheritance.
+     */
+    IRImager();
+};
+
+/**
+ * Mocked version of IRImager.
+ *
+ * This class can be used to return dummy data when there isn't a camera
+ * connected (e.g. for testing).
+ */
+class IRImagerMock: public IRImager {
+public:
+    IRImagerMock(const std::filesystem::path &xml_path);
 };

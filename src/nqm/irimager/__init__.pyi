@@ -27,9 +27,6 @@ This is *not* the version of the underlying C++ libirimager library.
 class IRImager:
     """IRImager object - interfaces with a camera."""
 
-    @typing.overload
-    def __init__(self) -> None: ...
-    @typing.overload
     def __init__(self, xml_path: os.PathLike) -> None:
         """Loads the configuration for an IR Camera from the given XML file"""
     def start_streaming(self) -> None:
@@ -65,7 +62,6 @@ class IRImager:
         :py:meth:`~IRImager.get_temp_range_decimal` to get the actual
         temperature in degrees Celcius.
         """
-    @staticmethod
     def get_library_version(self) -> typing.Union[str, typing.Literal["MOCKED"]]:
         """Get the version of the libirimager library.
 
@@ -73,3 +69,10 @@ class IRImager:
             the version of the libirmager library, or "MOCKED" if the library
             has been mocked.
         """
+
+class IRImagerMock(IRImager):
+    """Mocked version of IRImager.
+
+    This class can be used to return dummy data when there isn't a camera
+    connected (e.g. for testing).
+    """

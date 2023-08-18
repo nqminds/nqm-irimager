@@ -47,7 +47,7 @@ jobs:
           stubtest_output="$(pdm run stubtest nqm.irimager || true)"
           if echo $stubtest_output \
             | grep '^error' \
-            | grep --invert-match 'error: nqm.irimager.IRImager is inconsistent, metaclass differs'; then
+            | grep --extended-regexp --invert-match 'error: nqm.irimager.IRImager(Mock)? is inconsistent, metaclass differs'; then
 
             echo "::error ::Stubtest returned unexpected errors, ${stubtest_output}"
             exit 1
