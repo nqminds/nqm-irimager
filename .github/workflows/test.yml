@@ -39,7 +39,7 @@ jobs:
           # SKIP `no-commit-to-branch`, otherwise CI on `main` will fail,
           # see https://github.com/pre-commit/pre-commit-hooks/issues/265
           SKIP: "no-commit-to-branch"
-        run: pdm run pre-commit run --show-diff-on-failure --color=always
+        run: pdm run pre-commit run --all --show-diff-on-failure --color=always
       - name: Check whether nqm.irimager stubs match implementation
         env:
           MYPYPATH: src
