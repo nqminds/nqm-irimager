@@ -6,9 +6,18 @@ import numpy as np
 import pytest
 
 from nqm.irimager import IRImagerMock as IRImager
+from nqm.irimager import Logger
 
 XML_FILE = pathlib.Path(__file__).parent / "__fixtures__" / "382x288@27Hz.xml"
 README_FILE = pathlib.Path(__file__).parent.parent / "README.md"
+
+
+@pytest.fixture(scope="module", autouse=True)
+def logger():
+    """Moves spdlog into Python's logging module, for better pytest compatibility"""
+    my_logger = Logger()
+    yield
+    del my_logger
 
 
 def test_irimager_loads_xml():
