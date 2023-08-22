@@ -112,6 +112,23 @@ else()
   target_link_libraries(irimager_class PRIVATE IRImager::IRImager)
 endif(IRImager_mock)
 
+add_library(irlogger_to_spd OBJECT
+  "src/nqm/irimager/irlogger_to_spd.cpp"
+)
+set_target_properties(irlogger_to_spd PROPERTIES
+  PRIVATE_HEADER
+    "src/nqm/irimager/irlogger_to_spd.hpp"
+  POSITION_INDEPENDENT_CODE ON # -fPIC
+)
+target_link_libraries(irlogger_to_spd
+  PUBLIC
+    propagate_const::propagate_const
+  PRIVATE
+    spdlog::spdlog_header_only
+    uvw::uvw
+    uv_a # static version, since we need very new v1.46.0 features
+)
+
 add_library(logger OBJECT
   "src/nqm/irimager/logger.cpp"
 )
@@ -126,6 +143,7 @@ target_link_libraries(logger
     pybind11::pybind11
   PRIVATE
     spdlog::spdlog_header_only
+    irlogger_to_spd
 )
 
 pybind11_add_module(irimager MODULE
@@ -141,6 +159,7 @@ target_link_libraries(irimager
   PRIVATE
     pybind11::headers
     irimager_class
+    irlogger_to_spd
     logger
 )
 

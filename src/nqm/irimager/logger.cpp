@@ -1,9 +1,12 @@
 #include "./logger.hpp"
 
 #include <atomic>
+#include <iostream>
 
 #include <spdlog/sinks/callback_sink.h>
 #include <spdlog/spdlog.h>
+
+#include "./irlogger_to_spd.hpp"
 
 /** Map spdlog's spd::level::level_enum enum to our LogLevel enum */
 static LogLevel spd_level_to_irimager_level(
@@ -42,13 +45,25 @@ struct Logger::impl {
    *
    * @param logging_callback The function to call with log data.
    */
-  impl(LoggingCallback logging_callback) { redirect_spd(logging_callback); }
+  impl(LoggingCallback logging_callback) {
+    redirect_spd(logging_callback);
 
-  virtual ~impl() { reset_spd_redirect(); }
+    // construct after calling redirect_spd, so we can see logs during
+    // construction
+    ir_logger_to_spd = std::make_unique<IRLoggerToSpd>();
+  }
+
+  virtual ~impl() {
+    ir_logger_to_spd = nullptr;
+    reset_spd_redirect();
+  }
 
  private:
   /** If we've called redirect_spd(), this var stores the original logger */
   std::shared_ptr<spdlog::logger> old_logger;
+
+  /** Handles piping IRImageSDK logs to spdlog */
+  std::unique_ptr<IRLoggerToSpd> ir_logger_to_spd;
 
   /** Redirects calls to `spdlog::log()` in C++ to the given callback */
   void redirect_spd(LoggingCallback logging_callback) {
