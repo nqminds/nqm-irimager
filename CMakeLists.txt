@@ -96,6 +96,17 @@ target_link_libraries(irimager_class
     spdlog::spdlog_header_only # less efficient, but avoids CXX11 ABI issues
 )
 
+set(MSAN TRUE)
+if(ASAN)
+  target_compile_options(irimager INTERFACE $<$<CONFIG:Debug>:-fsanitize=address,undefined -fno-omit-frame-pointer -fno-common>)
+  target_link_libraries(irimager INTERFACE $<$<CONFIG:Debug>:-fsanitize=address,undefined>)
+endif()
+
+if(MSAN)
+  target_compile_options(irimager INTERFACE $<$<CONFIG:Debug>:-fno-omit-frame-pointer -fsanitize=memory>)
+  target_link_libraries(irimager INTERFACE $<$<CONFIG:Debug>:-fno-omit-frame-pointer -fsanitize=memory>)
+endif()
+
 if(IRImager_mock)
   target_compile_definitions(irimager_class PRIVATE IR_IMAGER_MOCK)
 else()
