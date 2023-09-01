@@ -33,6 +33,29 @@ We recommend using [PDM](https://pdm.fming.dev/latest/) for local development.
 pdm install
 ```
 
+### Usage
+
+```python
+import logging
+from nqm.irimager import IRImager, Logger
+
+logging.basicConfig()
+logging.getLogger().setLevel(1) # trace
+logger = Logger()
+# Your XML config,
+# see http://documentation.evocortex.com/libirimager2/html/Overview.html#subsec_overview_config_file
+XML_CONFIG = "tests/__fixtures__/382x288@27Hz.xml"
+irimager = IRImager(XML_CONFIG)
+with irimager:
+    while True: # press CTRL+C to stop this program
+        array, timestamp = irimager.get_frame()
+        frame_in_celsius = array / (10 ** irimager.get_temp_range_decimal()) - 100
+        print(f"At {timestamp}: Average temperature is {frame_in_celsius.mean()}")
+        break
+
+del logger # to stop
+```
+
 ## Development
 
 ### Pre-commit checks (linting and type checks)

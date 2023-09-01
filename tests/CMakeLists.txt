@@ -8,6 +8,15 @@ add_custom_target(copy-fixtures ALL
   "${CMAKE_CURRENT_BINARY_DIR}/__fixtures__"
 )
 
+add_executable(test_chrono
+  test_chrono.cpp
+)
+target_link_libraries(test_chrono
+  PRIVATE
+    GTest::gtest_main
+    spdlog::spdlog_header_only
+)
+
 add_executable(test_irimager_class
   test_irimager_class.cpp
 )
