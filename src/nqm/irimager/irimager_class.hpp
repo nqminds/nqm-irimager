@@ -1,3 +1,6 @@
+#ifndef NQM_IRIMAGER_IRIMAGER
+#define NQM_IRIMAGER_IRIMAGER
+
 #include <pybind11/numpy.h>
 
 #include <chrono>
@@ -110,3 +113,5 @@ class IRImagerMock : public IRImager {
  public:
   IRImagerMock(const std::filesystem::path &xml_path);
 };
+
+#endif /* NQM_IRIMAGER_IRIMAGER */
