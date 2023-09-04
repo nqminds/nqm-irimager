@@ -26,7 +26,7 @@ jobs:
         run: pipx install pdm
       - name: Install cibuildwheel
         run: |
-          pdm install --group cibuildwheel --no-default
+          pdm install --group cibuildwheel --no-default --no-self
       - id: set-matrix
         run: |
             echo "include=$(
@@ -73,7 +73,7 @@ jobs:
         run: pipx install pdm
       - name: Install cibuildwheel
         run: |
-          pdm install --group cibuildwheel --no-default
+          pdm install --group cibuildwheel --no-default --no-self
       - name: Build wheels
         run: |
           pdm run cibuildwheel --only '${{ matrix.only }}'
