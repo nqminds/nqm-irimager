@@ -21,6 +21,14 @@ enum class LogLevel {
   critical = 50,
 };
 
+/**
+ * @brief Logging callback function.
+ *
+ * @warning Please be aware that this std::function might have a Python object
+ * inside of it.
+ * This means that you **MUST NOT COPY OR DELETE** LoggingCallback objects,
+ * **UNLESS** you have the Python GIL.
+ */
 typedef std::function<void(LogLevel, std::string_view)> LoggingCallback;
 
 /**
