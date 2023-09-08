@@ -1,6 +1,12 @@
 # CPM Package Lock
 # This file should be committed to version control
 
+# googletest
+CPMDeclarePackage(googletest
+  NAME googletest
+  VERSION 1.14.0
+  EXCLUDE_FROM_ALL TRUE URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.tar.gz URL_HASH SHA3_256=d00154b480c96478b7d06491a536a4d99cd0eabcb8c654dec2e58412d8fca9cc
+)
 # spdlog
 CPMDeclarePackage(spdlog
   NAME spdlog

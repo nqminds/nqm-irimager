@@ -6,7 +6,7 @@ groups = ["default", "test", "lint", "types", "docs", "cibuildwheel"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:3a45fa5b48e41e847b0ff95296d26adf4dfae10bee29650274a0678e9dcb3a80"
+content_hash = "sha256:e3d1780a6a14104405c8d4e1dac31f9e14be888bf5c4ab682553c57a11c09983"
 
 [[package]]
 name = "alabaster"
@@ -685,6 +685,20 @@ dependencies = [
 files = [
     {file = "pytest-7.4.0-py3-none-any.whl", hash = "sha256:78bf16451a2eb8c7a2ea98e32dc119fd2aa758f1d5d66dbf0a59d69a3969df32"},
     {file = "pytest-7.4.0.tar.gz", hash = "sha256:b4bf8c45bd59934ed84001ad51e11b4ee40d40a1229d2c79f9c592b0a3f6bd8a"},
+]
+
+[[package]]
+name = "pytest-cpp"
+version = "2.3.0"
+requires_python = ">=3.7"
+summary = "Use pytest's runner to discover and execute C++ tests"
+dependencies = [
+    "colorama",
+    "pytest>=7.0",
+]
+files = [
+    {file = "pytest-cpp-2.3.0.tar.gz", hash = "sha256:37abfa693697940aed2e7c034698188dee3616183ad9b3f764f3b06aeb75ed4a"},
+    {file = "pytest_cpp-2.3.0-py3-none-any.whl", hash = "sha256:1e9809b0ba8dab4942102274650b3dc5ae22abc2fa4fe46c3da5803b66181164"},
 ]
 
 [[package]]

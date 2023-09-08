@@ -27,6 +27,7 @@ jobs:
         run: pdm install
         env:
           SKBUILD_CMAKE_ARGS: "-DIRImager_mock=ON"
+          SKBUILD_CMAKE_DEFINE: "BUILD_TESTING=ON"
           CPM_SOURCE_CACHE: ~/.cache/cpm-cache
           SKBUILD_CMAKE_BUILD_TYPE: "Debug" # makes compiler warnings into errors
       - uses: actions/cache@v3
@@ -79,6 +80,8 @@ jobs:
           cacheFrom: ghcr.io/${{ github.repository_owner }}/nqm-irimager-devcontainer
           # only push new image if this is a on the `main` branch
           refFilterForPush: "refs/heads/main"
+          env: |
+            SKBUILD_CMAKE_DEFINE="BUILD_TESTING=ON"
           runCmd: |
             pdm install
             pdm run pytest

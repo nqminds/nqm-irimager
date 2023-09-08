@@ -30,6 +30,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(CPM)
 CPMUsePackageLock(package-lock.cmake)
 
+CPMGetPackage(googletest)
 CPMGetPackage(spdlog)
 CPMGetPackage(propagate_const)
 
@@ -115,11 +116,21 @@ set_target_properties(irimager PROPERTIES
   PRIVATE_HEADER
     "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
 )
+target_compile_definitions(irimager PRIVATE "${IRImager_DEFINITIONS}")
 target_link_libraries(irimager
   PRIVATE
     pybind11::headers
     irimager_class
 )
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  # C++ unit tests can be run using CTest
+  # they can also by run with pytest
+  include(CTest)
+  if(BUILD_TESTING)
+    add_subdirectory(tests)
+  endif()
+endif()
 
 target_compile_definitions(irimager PRIVATE
   DOCSTRINGS_H="${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
