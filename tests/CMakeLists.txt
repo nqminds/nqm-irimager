@@ -18,6 +18,16 @@ target_link_libraries(test_irimager_class
     irimager_class
 )
 
+add_executable(test_irlogger_parser
+  test_irlogger_parser.cpp
+)
+target_link_libraries(test_irlogger_parser
+  PRIVATE
+    GTest::gtest
+    gmock_main
+    irlogger_parser
+)
+
 add_executable(test_string_ring_buffer
   test_string_ring_buffer.cpp
 )
