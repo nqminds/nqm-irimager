@@ -1,0 +1,57 @@
+DEBUG [IRDeviceParams.cpp:146] @ 0.000693115s :Parameters
+DEBUG [IRDeviceParams.cpp:147] @ 0.000894043s :serial: 0
+DEBUG [IRDeviceParams.cpp:148] @ 0.000959229s :videoformatindex: 0
+DEBUG [IRDeviceParams.cpp:149] @ 0.00101123s :fov: 25
+DEBUG [IRDeviceParams.cpp:150] @ 0.00106299s :optics_text:
+DEBUG [IRDeviceParams.cpp:151] @ 0.00111499s :formatspath: /usr/share/libirimager
+DEBUG [IRDeviceParams.cpp:152] @ 0.00119702s :calipath: /usr/share/libirimager/cali
+DEBUG [IRDeviceParams.cpp:153] @ 0.00125122s :temperature min: 450
+DEBUG [IRDeviceParams.cpp:154] @ 0.00129712s :temperature max: 1800
+DEBUG [IRDeviceParams.cpp:155] @ 0.00137817s :framerate: 27
+DEBUG [IRDeviceParams.cpp:156] @ 0.00142603s :bispectral: 0
+DEBUG [IRDeviceParams.cpp:157] @ 0.00147119s :average: 0
+DEBUG [IRDeviceParams.cpp:158] @ 0.00154321s :flag automatic: 1
+DEBUG [IRDeviceParams.cpp:159] @ 0.00159521s :min interval: 15
+DEBUG [IRDeviceParams.cpp:160] @ 0.00198804s :max interval: 0
+DEBUG [IRDeviceParams.cpp:161] @ 0.00204004s :PIF mode: 0
+DEBUG [IRDeviceParams.cpp:162] @ 0.00208911s :chip heating mode: 0
+DEBUG [IRDeviceParams.cpp:163] @ 0.00214111s :chip heating fixed val: 40
+DEBUG [IRDeviceParams.cpp:164] @ 0.00219116s :focus:  50
+INFO [IRDeviceCreate.cpp:23] @ 0.00223999s :Searching for attached device...
+DEBUG [UdevHelper.cpp:93] @ 0.326617s :Try opening video device /dev/video0 ... success
+DEBUG [IRDeviceUVC.cpp:25] @ 0.329064s :Instantiated ImagerUVC
+DEBUG [IRDeviceUVC.cpp:148] @ 0.329569s :OpenDevice
+DEBUG [IRDeviceUVC.cpp:174] @ 0.330409s :Try opening video device /dev/video0 ... success
+DEBUG [IRDeviceUVC.cpp:207] @ 0.331254s :Stream size: 382 x 290
+DEBUG [IRDeviceUVC.cpp:223] @ 0.331585s :Pixelformat: 1448695129, Frequency: 27
+DEBUG [IRDeviceUVC.cpp:236] @ 0.331827s :VIDIOC_QUERYCAP successful for PI IMAGER: PI IMAGER
+DEBUG [IRDeviceUVC.cpp:78] @ 0.334209s :initMmap
+DEBUG [IRDeviceUVC.cpp:110] @ 0.336253s :mmap request: 4 buffers
+DEBUG [Cali.cpp:96] @ 0.339082s :Calibration directory path: /usr/share/libirimager/cali
+DEBUG [Cali.cpp:97] @ 0.339507s :Calibration file name: Cali-18072010.xml
+DEBUG [Cali.cpp:107] @ 0.341156s :Calibration data A: 1450 B:470 C:4095 D:1500
+INFO [IRImager.cpp:245] @ 0.342197s :Init thermal imager with size: 382x290@27 Hz
+DEBUG [IRImager.cpp:354] @ 0.343261s :Using HID control interface
+WARNING [IRImager.cpp:1089] @ 1.42395s :Will not set focus motor pos --> no focus motor
+DEBUG [IRImager.cpp:388] @ 1.42514s :Frameconfig - width(in): 382, height(in): 290, interval: 370370, max framerate: 27, HW interval: 0.037037
+DEBUG [ImageProcessing.cpp:174] @ 1.42783s :Source buffer size: 221560 Width: 382 Height: 290
+DEBUG [OpSource.cpp:331] @ 1.46186s :Using formats path: /usr/share/libirimager/Formats.def
+DEBUG [OpSource.cpp:560] @ 1.4636s :Format found with size: 382
+DEBUG [OpSource.cpp:331] @ 1.46383s :Using formats path: /usr/share/libirimager/Formats.def
+DEBUG [ImageProcessing.cpp:104] @ 1.46726s :Source buffer size: 221560 Width: 382 Height: 290
+DEBUG [OpSource.cpp:331] @ 1.46786s :Using formats path: /usr/share/libirimager/Formats.def
+DEBUG [OpSource.cpp:560] @ 1.46869s :Format found with size: 382
+DEBUG [IRImager.cpp:685] @ 1.47787s :Caught onFrameInit with size: 382x288
+DEBUG [OpCorr.cpp:437] @ 1.49483s :Read cali: /usr/share/libirimager/cali/Cali-18072010-25-450-1800-27.dat
+DEBUG [ImageProcessing.cpp:911] @ 1.52923s :Update flag temperature: 35.6875
+DEBUG [ImageProcessing.cpp:914] @ 1.53125s :Update box temperature: 35.6875
+DEBUG [IRImager.cpp:482] @ 1.54691s :Chip heating disabled
+DEBUG [IRImager.cpp:525] @ 1.54762s :Release imager
+DEBUG [BaseControlDevice.cpp:26] @ 1.56973s :Base destructor called
+DEBUG [IRImager.cpp:532] @ 1.57s :Delete image processing
+DEBUG [IRImager.cpp:539] @ 1.58033s :Delete buffer
+DEBUG [IRImager.cpp:547] @ 1.58087s :Delete source buffer
+DEBUG [IRImager.cpp:554] @ 1.58127s :Delete buffer (energy)
+DEBUG [IRImager.cpp:561] @ 1.58154s :Delete timer
+DEBUG [IRImager.cpp:567] @ 1.58195s :Delete manual timer
+DEBUG [IRDeviceUVC.cpp:383] @ 1.58227s :CloseDevice

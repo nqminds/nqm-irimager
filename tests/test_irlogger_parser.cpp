@@ -1,6 +1,10 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include <filesystem>
+#include <fstream>
+#include <iterator>
+
 #include "../src/nqm/irimager/irlogger_parser.hpp"
 
 // Demonstrate some basic assertions.
@@ -196,3 +200,34 @@ TEST(test_irlogger_parser, HandlesOverflows) {
 
   parser.push_data("INFO [test_irlogger_parser.cpp] @ 0.0000s :Hello World!\n");
 }
+
+class TestIRLoggerParserWithLogFile
+    : public testing::TestWithParam<std::filesystem::path> {};
+
+// load a log file into memory, and see if running `push_data()` works with it
+TEST_P(TestIRLoggerParserWithLogFile, WorksOnLogFileAllAtOnce) {
+  auto path = GetParam();
+
+  auto input_stream = std::ifstream(path, std::ios::in);
+
+  auto str = std::string(std::istreambuf_iterator<char>{input_stream}, {});
+
+  int log_lines = 0;
+  for (std::size_t pos = 0; pos < str.length(); pos++) {
+    log_lines += (str[pos] == '\n');
+  }
+
+  testing::MockFunction<void(LogLevel, std::string_view)> mock_callback;
+  EXPECT_CALL(mock_callback, Call(::testing::_, ::testing::_))
+      .Times(::testing::Exactly(log_lines));
+
+  auto parser = IRLoggerParser(mock_callback.AsStdFunction());
+  parser.push_data(str);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    RealLogs, TestIRLoggerParserWithLogFile,
+    ::testing::Values((std::filesystem::path(__FILE__).parent_path() /
+                       "__fixtures__" / "piimager.error.log"),
+                      (std::filesystem::path(__FILE__).parent_path() /
+                       "__fixtures__" / "piimager.regular.log")));
