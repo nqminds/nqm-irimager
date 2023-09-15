@@ -118,6 +118,9 @@ IRImager::IRImager(IRImager &&other) = default;
 IRImager::IRImager(const std::filesystem::path &xml_path)
     : pImpl{std::make_unique<IRImagerDefaultImplementation>(xml_path)} {}
 
+IRImager::IRImager(const char *xml_path, std::size_t xml_path_len)
+    : IRImager(std::string(xml_path, xml_path_len)) {}
+
 IRImager::~IRImager() = default;
 
 void IRImager::start_streaming() { pImpl->start_streaming(); }
