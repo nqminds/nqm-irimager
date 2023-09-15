@@ -21,6 +21,9 @@ project(
   VERSION "${skbuild_project_numeric_version}"
   LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 17) # we use C++17 std::string_view
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # CMake Package Manager
@@ -104,7 +107,6 @@ else()
   target_link_libraries(irimager PRIVATE IRImager::IRImager)
 endif(IRImager_mock)
 
-target_compile_features(irimager PRIVATE cxx_std_17)
 target_compile_definitions(irimager PRIVATE
   DOCSTRINGS_H="${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
   SKBUILD_PROJECT_VERSION="${SKBUILD_PROJECT_VERSION}"
