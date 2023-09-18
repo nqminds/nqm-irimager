@@ -3,6 +3,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       matrix:
         python-version: ["3.9"]
@@ -61,6 +62,7 @@ jobs:
   dev-container:
     name: Test and build the dev-container image
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout (GitHub)
         uses: actions/checkout@v3
