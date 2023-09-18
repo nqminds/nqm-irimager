@@ -8,6 +8,16 @@ struct IRImager::impl {
   impl(const std::filesystem::path &xml_path) {
     // do a basic check that the given file is readable, and is an XML file
     auto xml_stream = std::ifstream(xml_path, std::fstream::in);
+
+    try {
+      xml_stream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    } catch (const std::ios_base::failure &error) {
+      // std::ios_base::failure isn't a std::runtime_error,
+      // if we're compiling with _GLIBCXX_USE_CXX11_ABI=0
+      throw std::runtime_error(std::string("Failed to open file ") +
+                               xml_path.string() + " due to " + error.what());
+    }
+
     auto xml_header = std::string(5, '\0');
 
     xml_stream.read(xml_header.data(),

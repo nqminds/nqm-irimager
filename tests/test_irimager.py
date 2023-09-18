@@ -8,6 +8,7 @@ import pytest
 from nqm.irimager import IRImagerMock as IRImager
 
 XML_FILE = pathlib.Path(__file__).parent / "__fixtures__" / "382x288@27Hz.xml"
+README_FILE = pathlib.Path(__file__).parent.parent / "README.md"
 
 
 def test_irimager_loads_xml():
@@ -16,7 +17,10 @@ def test_irimager_loads_xml():
     IRImager(XML_FILE)
 
     with pytest.raises(RuntimeError, match="Invalid XML file"):
-        IRImager(pathlib.Path("README.md"))
+        IRImager(pathlib.Path(README_FILE))
+
+    with pytest.raises(RuntimeError, match="Failed to open file"):
+        IRImager(pathlib.Path("this-file-does-not-exist"))
 
 
 def test_get_frame_fails_when_not_streaming():
