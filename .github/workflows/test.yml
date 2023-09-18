@@ -82,6 +82,6 @@ jobs:
           # only push new image if this is a on the `main` branch
           refFilterForPush: "refs/heads/main"
           runCmd: |
-            set -e # quit on error
+            set -xe # print cmds, and quit on error
             pdm install
             pdm run pytest
