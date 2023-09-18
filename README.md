@@ -51,6 +51,20 @@ Tests are written using [`pytest`](https://docs.pytest.org/en/7.2.x/), and can b
 pdm run pytest
 ```
 
+#### C++ unit tests
+
+Some C++ tests are written using
+[`GoogleTest`](https://google.github.io/googletest/) and
+[`gMock`](https://google.github.io/googletest/gmock_for_dummies.html).
+
+As these tests need the [`Development.Embed`][FindPython3] Python3 embedding
+artifact (which aren't available on most systems), you must opt-in to building
+and running these tests by using:
+
+```bash
+SKBUILD_CMAKE_DEFINE="BUILD_TESTING=ON" pdm install && pdm run pytest
+```
+
 #### Mypy stubtest
 
 You can use
