@@ -31,6 +31,17 @@ class IRImager {
    */
   IRImager(const std::filesystem::path &xml_path);
 
+  /**
+   * @copydoc IRImager::IRImager(const std::filesystem::path &xml_path)
+   *
+   * @remark You should use
+   * IRImager::IRImager(const std::filesystem::path &xml_path)
+   * if possible. This function only exists to work-around C++11 libstdc++
+   * ABI issues.
+   */
+  [[gnu::access(read_only, 2, 3),
+    gnu::nonnull(2)]] IRImager(const char *xml_path, std::size_t xml_path_len);
+
   /** Destructor */
   virtual ~IRImager();
 
