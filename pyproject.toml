@@ -28,6 +28,7 @@ build-backend = "scikit_build_core.build"
 wheel.packages = [ "src/nqm" ]
 wheel.license-files = [ "LICENSES/*", "docs/licenses.rst" ]
 cmake.targets = ["all", "cpm-update-package-lock"]
+cmake.minimum-version = "3.25"
 build-dir = "build"
 
 [tool.scikit-build.cmake.define]
@@ -61,6 +62,7 @@ testpaths = [
     "tests",
     "build/tests",
 ]
+timeout = 10 # each test should finish within 5 seconds
 
 [tool.pdm.dev-dependencies]
 lint = [
@@ -76,6 +78,7 @@ test = [
     # in Python 3.11+, we can use the built-in tomllib instead
     "tomli<3.0.0,>=2.0.1; python_version < \"3.11\"",
     "pytest-cpp<3.0.0,>=2.3.0",
+    "pytest-timeout>=2.1.0, <3.0.0",
 ]
 docs = [
     "sphinx>=5.3.0",
@@ -93,7 +96,10 @@ archs = [
     "x86_64",
 ]
 test-command = "pytest {project}/tests"
-test-requires = "pytest"
+test-requires = [
+    "pytest",
+    "pytest-timeout",
+]
 
 # libirimager needs a relatively new stdc++ library
 manylinux-x86_64-image = "manylinux_2_28"

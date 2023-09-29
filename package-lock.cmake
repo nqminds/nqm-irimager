@@ -11,6 +11,7 @@ CPMDeclarePackage(googletest
 CPMDeclarePackage(spdlog
   NAME spdlog
   VERSION 1.12.0
+  SYSTEM ON
   OPTIONS
     "SPDLOG_BUILD_PIC ON"
     "URL"
