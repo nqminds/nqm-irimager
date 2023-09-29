@@ -6,7 +6,7 @@ groups = ["default", "test", "lint", "types", "docs", "cibuildwheel"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:3a45fa5b48e41e847b0ff95296d26adf4dfae10bee29650274a0678e9dcb3a80"
+content_hash = "sha256:c4794bd74a4c7251ae6b7c0d4f8c007d5fcaa703513c3b66e7d3c7e7680e3492"
 
 [[package]]
 name = "alabaster"
@@ -685,6 +685,19 @@ dependencies = [
 files = [
     {file = "pytest-7.4.0-py3-none-any.whl", hash = "sha256:78bf16451a2eb8c7a2ea98e32dc119fd2aa758f1d5d66dbf0a59d69a3969df32"},
     {file = "pytest-7.4.0.tar.gz", hash = "sha256:b4bf8c45bd59934ed84001ad51e11b4ee40d40a1229d2c79f9c592b0a3f6bd8a"},
+]
+
+[[package]]
+name = "pytest-timeout"
+version = "2.1.0"
+requires_python = ">=3.6"
+summary = "pytest plugin to abort hanging tests"
+dependencies = [
+    "pytest>=5.0.0",
+]
+files = [
+    {file = "pytest-timeout-2.1.0.tar.gz", hash = "sha256:c07ca07404c612f8abbe22294b23c368e2e5104b521c1790195561f37e1ac3d9"},
+    {file = "pytest_timeout-2.1.0-py3-none-any.whl", hash = "sha256:f6f50101443ce70ad325ceb4473c4255e9d74e3c7cd0ef827309dfa4c0d975c6"},
 ]
 
 [[package]]
