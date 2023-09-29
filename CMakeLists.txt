@@ -30,6 +30,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(CPM)
 CPMUsePackageLock(package-lock.cmake)
 
+CPMGetPackage(googletest)
 CPMGetPackage(spdlog)
 CPMGetPackage(propagate_const)
 
@@ -75,24 +76,24 @@ add_compile_options(
   $<$<COMPILE_LANGUAGE:CXX>:-Wold-style-cast>
 )
 
-pybind11_add_module(irimager MODULE
-  "src/nqm/irimager/irimager.cpp"
+add_library(irimager_class OBJECT
   "src/nqm/irimager/irimager_class.cpp"
-  "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
 )
-set_target_properties(irimager PROPERTIES
+set_target_properties(irimager_class PROPERTIES
   PRIVATE_HEADER
-    "src/nqm/irimager/irimager_class.hpp;${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
+    "src/nqm/irimager/irimager_class.hpp"
+  POSITION_INDEPENDENT_CODE ON # -fPIC
 )
-target_link_libraries(irimager
-  PRIVATE
-    pybind11::headers
-    spdlog::spdlog_header_only # less efficient, but avoids CXX11 ABI issues
+target_link_libraries(irimager_class
+  PUBLIC
+    pybind11::pybind11
     propagate_const::propagate_const
+  PRIVATE
+    spdlog::spdlog_header_only # less efficient, but avoids CXX11 ABI issues
 )
 
 if(IRImager_mock)
-  target_compile_definitions(irimager PRIVATE IR_IMAGER_MOCK)
+  target_compile_definitions(irimager_class PRIVATE IR_IMAGER_MOCK)
 else()
   find_package(IRImager 4.0...5.0)
 
@@ -104,8 +105,32 @@ else()
       that doesn't need libirimager, or a thermal camera.")
   endif()
 
-  target_link_libraries(irimager PRIVATE IRImager::IRImager)
+  target_link_libraries(irimager_class PRIVATE IRImager::IRImager)
 endif(IRImager_mock)
+
+pybind11_add_module(irimager MODULE
+  "src/nqm/irimager/irimager.cpp"
+  "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
+)
+set_target_properties(irimager PROPERTIES
+  PRIVATE_HEADER
+    "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
+)
+target_compile_definitions(irimager PRIVATE "${IRImager_DEFINITIONS}")
+target_link_libraries(irimager
+  PRIVATE
+    pybind11::headers
+    irimager_class
+)
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  # C++ unit tests can be run using CTest
+  # they can also by run with pytest
+  include(CTest)
+  if(BUILD_TESTING)
+    add_subdirectory(tests)
+  endif()
+endif()
 
 target_compile_definitions(irimager PRIVATE
   DOCSTRINGS_H="${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"

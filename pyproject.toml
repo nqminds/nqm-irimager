@@ -27,8 +27,12 @@ build-backend = "scikit_build_core.build"
 [tool.scikit-build]
 wheel.packages = [ "src/nqm" ]
 wheel.license-files = [ "LICENSES/*", "docs/licenses.rst" ]
-cmake.targets = ["irimager", "cpm-update-package-lock"]
+cmake.targets = ["all", "cpm-update-package-lock"]
 cmake.minimum-version = "3.25"
+build-dir = "build"
+
+[tool.scikit-build.cmake.define]
+BUILD_TESTING = "OFF" # this requires Development.Embed which isn't available on manylinux
 
 [tool.pylint.main]
 # checks Google-style docstrings
@@ -54,6 +58,10 @@ mypy_path = "src"
 addopts = [
     "--import-mode=importlib",
 ]
+testpaths = [
+    "tests",
+    "build/tests",
+]
 timeout = 10 # each test should finish within 5 seconds
 
 [tool.pdm.dev-dependencies]
@@ -69,6 +77,7 @@ test = [
     "pytest>=7.4.0",
     # in Python 3.11+, we can use the built-in tomllib instead
     "tomli<3.0.0,>=2.0.1; python_version < \"3.11\"",
+    "pytest-cpp<3.0.0,>=2.3.0",
     "pytest-timeout>=2.1.0, <3.0.0",
 ]
 docs = [
