@@ -26,7 +26,7 @@ jobs:
       - name: pdm install, using mock libirimager library
         run: pdm install --verbose
         env:
-          SKBUILD_CMAKE_ARGS: "-DIRImager_mock=ON"
+          SKBUILD_CMAKE_DEFINE: "IRImager_mock=ON"
           CPM_SOURCE_CACHE: ~/.cache/cpm-cache
       - name: Build documentation into `build/` folder
         run: |
