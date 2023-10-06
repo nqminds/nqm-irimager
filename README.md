@@ -18,7 +18,7 @@ Python module for interfacing with [EvoCortex IRImagerDirect SDK][1].
 install the package.
 
 It's possible to install a mocked version of `nqm.irimager` for testing
-by defining `SKBUILD_CMAKE_ARGS='-DIRImager_mock=ON'` whiling building
+by defining `SKBUILD_CMAKE_DEFINE='IRImager_mock=ON'` whiling building
 `nqm.irimager`.
 
 ### Install `nqm.irimager`
@@ -63,6 +63,12 @@ and running these tests by using:
 
 ```bash
 SKBUILD_CMAKE_DEFINE="BUILD_TESTING=ON" pdm install && pdm run pytest
+```
+
+If you want to use both `BUILD_TESTING=ON` and `IRImager_mock=ON`, you can do the following:
+
+```bash
+SKBUILD_CMAKE_DEFINE='BUILD_TESTING=ON;IRImager_mock=ON' pdm install && pdm run pytest
 ```
 
 #### Mypy stubtest

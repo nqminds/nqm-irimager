@@ -100,7 +100,7 @@ else()
   if(NOT IRImager_FOUND)
     message(FATAL_ERROR "libirimager was not found. \
       It can be downloaded from https://evocortex.org/products/irimagerdirect-sdk/. \
-      Alternatively, compile with `SKBUILD_CMAKE_ARGS='-DIRImager_mock=ON'` to
+      Alternatively, compile with `SKBUILD_CMAKE_DEFINE='IRImager_mock=ON'` to
       create a mocked extension \
       that doesn't need libirimager, or a thermal camera.")
   endif()
