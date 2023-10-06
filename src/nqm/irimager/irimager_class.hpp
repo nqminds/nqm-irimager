@@ -28,6 +28,8 @@ class IRImager {
 
   /**
    * Loads the configuration for an IR Camera from the given XML file
+   *
+   * @throw std::runtime_error if the XML file could not be read.
    */
   IRImager(const std::filesystem::path &xml_path);
 

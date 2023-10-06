@@ -13,6 +13,15 @@ TEST(test_get_temp_range_decimal, BasicAssertions) {
             0);  // this value should almost always be 1
 }
 
+/**
+ * Should throw an error when trying to open a non-existant XML file.
+ */
+TEST(test_irimager_class, NonExistantFile) {
+  auto path = std::filesystem::path("this-file-should-not-exist");
+  EXPECT_THROW(IRImager(path.string().data(), path.string().size()),
+               std::runtime_error);
+}
+
 int main(int argc, char **argv) {
   XML_FILE = std::filesystem::path(argv[0]).parent_path() / "__fixtures__" /
              "382x288@27Hz.xml";
