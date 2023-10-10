@@ -57,7 +57,7 @@ jobs:
             exit 0
           fi
       - name: Test with pytest
-        run: pdm run pytest
+        run: pdm run pytest -vv
 
   dev-container:
     name: Test and build the dev-container image
@@ -86,4 +86,4 @@ jobs:
           runCmd: |
             set -xe # print cmds, and quit on error
             pdm install
-            pdm run pytest
+            pdm run pytest -vv
