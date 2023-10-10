@@ -163,3 +163,6 @@ std::string_view IRImager::get_library_version() {
 IRImagerMock::IRImagerMock(const std::filesystem::path &xml_path) {
   pImpl = std::make_unique<IRImagerMockImpl>(xml_path);
 }
+
+IRImagerMock::IRImagerMock(const char *xml_path, std::size_t xml_path_len)
+    : IRImagerMock(std::string(xml_path, xml_path_len)) {}
