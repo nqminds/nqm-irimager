@@ -14,9 +14,9 @@ TEST(test_get_temp_range_decimal, BasicAssertions) {
 }
 
 /**
- * Should throw an error when trying to open a non-existant XML file.
+ * Should throw an error when trying to open a non-existent XML file.
  */
-TEST(test_irimager_class, NonExistantFile) {
+TEST(test_irimager_class, NonExistentFile) {
   auto path = std::filesystem::path("this-file-should-not-exist");
   EXPECT_THROW(IRImager(path.string().data(), path.string().size()),
                std::runtime_error);
