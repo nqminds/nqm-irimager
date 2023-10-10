@@ -28,6 +28,7 @@ enum class LogLevel {
  * inside of it.
  * This means that you **MUST NOT COPY OR DELETE** LoggingCallback objects,
  * **UNLESS** you have the Python GIL.
+ * @warning This function must be thread-safe (it should use a mutex/lock).
  */
 typedef std::function<void(LogLevel, std::string_view)> LoggingCallback;
 
