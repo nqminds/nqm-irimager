@@ -8,7 +8,8 @@ static std::filesystem::path XML_FILE;
 
 // Demonstrate some basic assertions.
 TEST(test_get_temp_range_decimal, BasicAssertions) {
-  auto irimager = IRImager(XML_FILE.string().data(), XML_FILE.string().size());
+  auto irimager =
+      IRImagerMock(XML_FILE.string().data(), XML_FILE.string().size());
   EXPECT_GE(irimager.get_temp_range_decimal(),
             0);  // this value should almost always be 1
 }
@@ -18,7 +19,7 @@ TEST(test_get_temp_range_decimal, BasicAssertions) {
  */
 TEST(test_irimager_class, NonExistentFile) {
   auto path = std::filesystem::path("this-file-should-not-exist");
-  EXPECT_THROW(IRImager(path.string().data(), path.string().size()),
+  EXPECT_THROW(IRImagerMock(path.string().data(), path.string().size()),
                std::runtime_error);
 }
 
