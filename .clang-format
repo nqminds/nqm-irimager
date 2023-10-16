@@ -3,4 +3,10 @@ Language: Cpp
 BasedOnStyle: Google
 IndentWidth: 2
 ColumnLimit: 80
+IncludeBlocks: Preserve
+IncludeCategories:
+  - Regex: '^<spdlog/fmt/.*\.h>' # spdlog/spdlog.h must be included first
+    SortPriority: 3
+  - Regex: '^<spdlog/.*\.h>'
+    SortPriority: 2
 ...
