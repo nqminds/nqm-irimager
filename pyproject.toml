@@ -4,7 +4,7 @@ version = "0.1.0a0" # equivalent to 0.1.0-alpha.0
 description = "Python module for interfacing with EvoCortex IRImagerDirect SDK"
 # Python 3.12 removes distutils, which seems to break stuff
 # and prevents installing this package, see https://peps.python.org/pep-0632
-requires-python = ">=3.8, <3.12"
+requires-python = ">=3.8, <3.12" # remember to manually sync with classifiers
 authors = [
     { name = "Alois Klink", email = "alois@nquiringminds.com" }
 ]
@@ -12,6 +12,20 @@ readme = "README.md"
 
 dependencies = [
     "numpy >=1.24.3, <1.25.0"
+]
+
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha", # currently only contains mocked interfaces
+  "Topic :: System :: Hardware :: Hardware Drivers",
+  "Topic :: Multimedia :: Graphics :: Capture :: Digital Camera",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Manufacturing",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
 ]
 
 [build-system]
