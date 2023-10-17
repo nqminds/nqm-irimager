@@ -102,6 +102,8 @@ struct IRImagerMockImpl final : public IRImager::impl {
 #include <libirimager/IRImager.h>
 #include <libirimager/IRLogger.h>
 
+namespace {
+
 /**
  * Exception class to convert evo::IRDeviceError to a human readable error.
  */
@@ -364,6 +366,8 @@ struct IRImagerRealImpl final : public IRImager::impl {
     data->thermal_data_available.notify_one();
   }
 };
+
+}  // namespace
 
 #define IRImagerDefaultImplementation IRImagerRealImpl
 #endif /* ifdef IR_IMAGER_MOCK */
