@@ -23,9 +23,9 @@ static const std::unordered_map<std::string, LogLevel>
  * @throws std::logic_error if parsing the IRLogger log line failed.
  */
 static std::tuple<LogLevel, std::string> parse_line(const std::string &line) {
-  const thread_local auto regex =
-      std::regex(R"""((\w+)\ \[([\w.:\d]*)\]\ \@\ ([\d\.]+s)\ :(.*))""",
-                 std::regex_constants::ECMAScript);
+  const thread_local auto regex = std::regex(
+      R"""((\w+)\ \[([\w.:\d]*)\]\ \@\ ([\d\.]+s)\ :(.*))""",
+      std::regex_constants::ECMAScript | std::regex_constants::optimize);
 
   std::smatch match_results;
 
