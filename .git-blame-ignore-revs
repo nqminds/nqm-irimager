@@ -1,0 +1,6 @@
+# commits to ignore from `git blame`
+
+# style: format C++ code through clang-format
+363ce1d69fe0e2d3dd978f1d5a82010d8e69d39f
+# style: fix indentation in `irimager_class.cpp`
+22cd3262bc53484b92d544901753e6c8f543e79d
