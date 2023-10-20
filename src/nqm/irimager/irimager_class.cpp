@@ -154,7 +154,9 @@ IRImager::get_frame() {
   return pImpl->get_frame();
 }
 
-short IRImager::get_temp_range_decimal() { return 1; }
+short IRImager::get_temp_range_decimal() {
+  return pImpl->get_temp_range_decimal();
+}
 
 std::string_view IRImager::get_library_version() {
   return pImpl->get_library_version();
