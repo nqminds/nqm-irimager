@@ -87,7 +87,6 @@ set_target_properties(irimager_class PROPERTIES
 )
 target_link_libraries(irimager_class
   PUBLIC
-    pybind11::pybind11
     propagate_const::propagate_const
     Eigen3::Eigen
   PRIVATE

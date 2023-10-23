@@ -2,7 +2,6 @@
 #define NQM_IRIMAGER_IRIMAGER
 
 #include <Eigen/Dense>
-#include <pybind11/pybind11.h>
 
 #include <chrono>
 #include <filesystem>
@@ -69,12 +68,6 @@ class IRImager {
    * Stop video grabbing
    */
   void stop_streaming();
-
-  IRImager *_enter_();
-
-  void _exit_(const std::optional<pybind11::type> &exc_type,
-              const std::optional<pybind11::object> &exc_value,
-              const std::optional<pybind11::object> &traceback);
 
   /**
    * Return a frame

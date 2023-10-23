@@ -132,18 +132,6 @@ void IRImager::start_streaming() { pImpl->start_streaming(); }
 
 void IRImager::stop_streaming() { pImpl->stop_streaming(); }
 
-IRImager *IRImager::_enter_() {
-  start_streaming();
-  return this;
-}
-
-void IRImager::_exit_(
-    [[maybe_unused]] const std::optional<pybind11::type> &exc_type,
-    [[maybe_unused]] const std::optional<pybind11::object> &exc_value,
-    [[maybe_unused]] const std::optional<pybind11::object> &traceback) {
-  stop_streaming();
-}
-
 std::tuple<Eigen::Matrix<uint16_t, Eigen::Dynamic, Eigen::Dynamic>,
            std::chrono::system_clock::time_point>
 IRImager::get_frame() {
