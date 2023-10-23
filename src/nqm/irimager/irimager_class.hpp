@@ -1,7 +1,8 @@
 #ifndef NQM_IRIMAGER_IRIMAGER
 #define NQM_IRIMAGER_IRIMAGER
 
-#include <pybind11/numpy.h>
+#include <Eigen/Dense>
+#include <pybind11/pybind11.h>
 
 #include <chrono>
 #include <filesystem>
@@ -82,12 +83,13 @@ class IRImager {
    *   e.g. if the camera isn't streaming.
    *
    * @returns A tuple containing:
-   *         1. A 2-D numpy array containing the image. This must be adjusted
+   *         1. A 2-D matrix containing the image. This must be adjusted
    *           by :py:meth:`~IRImager.get_temp_range_decimal` to get the
    *           actual temperature in degrees Celcius.
    *         2. The time the image was taken.
    */
-  std::tuple<pybind11::array_t<uint16_t>, std::chrono::system_clock::time_point>
+  std::tuple<Eigen::Matrix<uint16_t, Eigen::Dynamic, Eigen::Dynamic>,
+             std::chrono::system_clock::time_point>
   get_frame();
 
   /**
