@@ -41,8 +41,14 @@ class IRImager {
    * if possible. This function only exists to work-around C++11 libstdc++
    * ABI issues.
    */
-  [[gnu::access(read_only, 2, 3),
-    gnu::nonnull(2)]] IRImager(const char *xml_path, std::size_t xml_path_len);
+  [[
+#ifdef __has_cpp_attribute
+#if __has_cpp_attribute(gnu::access)
+      gnu::access(read_only, 2, 3),
+#endif
+#endif
+      gnu::nonnull(2)]] IRImager(const char *xml_path,
+                                 std::size_t xml_path_len);
 
   /** Destructor */
   virtual ~IRImager();
@@ -134,9 +140,14 @@ class IRImagerMock : public IRImager {
    * if possible. This function only exists to work-around C++11 libstdc++
    * ABI issues.
    */
-  [[gnu::access(read_only, 2, 3),
-    gnu::nonnull(2)]] IRImagerMock(const char *xml_path,
-                                   std::size_t xml_path_len);
+  [[
+#ifdef __has_cpp_attribute
+#if __has_cpp_attribute(gnu::access)
+      gnu::access(read_only, 2, 3),
+#endif
+#endif
+      gnu::nonnull(2)]] IRImagerMock(const char *xml_path,
+                                     std::size_t xml_path_len);
 };
 
 #endif /* NQM_IRIMAGER_IRIMAGER */
