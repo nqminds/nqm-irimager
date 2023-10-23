@@ -7,6 +7,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.9"]
+        cxx: ["g++", "clang++"]
     steps:
       - uses: actions/checkout@v3
       - name: Install pdm
@@ -30,6 +31,7 @@ jobs:
           SKBUILD_CMAKE_DEFINE: "BUILD_TESTING=ON;IRImager_mock=ON"
           CPM_SOURCE_CACHE: ~/.cache/cpm-cache
           SKBUILD_CMAKE_BUILD_TYPE: "Debug" # makes compiler warnings into errors
+          CXX: ${{ matrix.cxx }}
       - uses: actions/cache@v3
         name: Cache pre-commit
         with:
