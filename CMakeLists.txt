@@ -33,6 +33,7 @@ CPMUsePackageLock(package-lock.cmake)
 CPMGetPackage(googletest)
 CPMGetPackage(spdlog)
 CPMGetPackage(propagate_const)
+CPMGetPackage(eigen)
 
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 find_package(pybind11 CONFIG REQUIRED)
@@ -88,6 +89,7 @@ target_link_libraries(irimager_class
   PUBLIC
     pybind11::pybind11
     propagate_const::propagate_const
+    Eigen3::Eigen
   PRIVATE
     spdlog::spdlog_header_only # less efficient, but avoids CXX11 ABI issues
 )
