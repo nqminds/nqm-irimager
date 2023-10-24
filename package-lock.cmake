@@ -25,3 +25,10 @@ CPMDeclarePackage(propagate_const
   VERSION 1.0.0
   URL https://github.com/jbcoe/propagate_const/archive/672cdbcd27028f8985dc7a559a085e530ac4656b.tar.gz URL_HASH SHA3_256=bd64b6f3886e223bdea0bfc53182f686bbae2b27ff5ea4b4a85342be78747cd4
 )
+# eigen
+CPMDeclarePackage(eigen
+  NAME eigen
+  VERSION 3.4.0
+  SYSTEM ON
+  EXCLUDE_FROM_ALL TRUE URL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 URL_HASH SHA3_256=652266ca1f8c15663076d21be840a85910ae4071453b2a1aa6f6a55ea22daddf
+)

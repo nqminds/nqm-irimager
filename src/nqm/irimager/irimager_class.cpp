@@ -35,7 +35,7 @@ struct IRImager::impl {
   virtual void stop_streaming() { streaming = false; }
 
   /** @copydoc IRImager::get_frame() */
-  virtual std::tuple<pybind11::array_t<uint16_t>,
+  virtual std::tuple<Eigen::Matrix<uint16_t, Eigen::Dynamic, Eigen::Dynamic>,
                      std::chrono::system_clock::time_point>
   get_frame() {
     if (!streaming) {
@@ -43,16 +43,11 @@ struct IRImager::impl {
     }
 
     auto frame_size = std::array<ssize_t, 2>{382, 288};
-    auto my_array = pybind11::array_t<uint16_t>(frame_size);
-
-    auto r = my_array.mutable_unchecked<frame_size.size()>();
-
-    for (ssize_t i = 0; i < frame_size[0]; i++) {
-      for (ssize_t j = 0; j < frame_size[1]; j++) {
-        r(i, j) = static_cast<uint16_t>((1800 + 100) *
-                                        std::pow(10, get_temp_range_decimal()));
-      }
-    }
+    auto max_value = static_cast<uint16_t>(
+        (1800 + 100) * std::pow(10, get_temp_range_decimal()));
+    auto my_array =
+        Eigen::Matrix<uint16_t, Eigen::Dynamic, Eigen::Dynamic>::Constant(
+            frame_size[0], frame_size[1], max_value);
 
     return std::make_tuple(my_array, std::chrono::system_clock::now());
   }
@@ -137,19 +132,8 @@ void IRImager::start_streaming() { pImpl->start_streaming(); }
 
 void IRImager::stop_streaming() { pImpl->stop_streaming(); }
 
-IRImager *IRImager::_enter_() {
-  start_streaming();
-  return this;
-}
-
-void IRImager::_exit_(
-    [[maybe_unused]] const std::optional<pybind11::type> &exc_type,
-    [[maybe_unused]] const std::optional<pybind11::object> &exc_value,
-    [[maybe_unused]] const std::optional<pybind11::object> &traceback) {
-  stop_streaming();
-}
-
-std::tuple<pybind11::array_t<uint16_t>, std::chrono::system_clock::time_point>
+std::tuple<Eigen::Matrix<uint16_t, Eigen::Dynamic, Eigen::Dynamic>,
+           std::chrono::system_clock::time_point>
 IRImager::get_frame() {
   return pImpl->get_frame();
 }

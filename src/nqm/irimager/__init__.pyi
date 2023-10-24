@@ -49,7 +49,7 @@ class IRImager:
 
         Returns:
             A tuple containing:
-                - A 2-D numpy array containing the image. This must be adjusted
+                - A 2-D matrix containing the image. This must be adjusted
                   by :py:meth:`~IRImager.get_temp_range_decimal` to get the
                   actual temperature in degrees Celcius.
                 - The time the image was taken.
