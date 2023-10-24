@@ -19,8 +19,11 @@ class IRImager {
  public:
   /**
    * Thermal frame matrix.
+   *
+   * Uses Row-major order for better compatibility with Numpy.
    */
-  using ThermalFrame = Eigen::Matrix<uint16_t, Eigen::Dynamic, Eigen::Dynamic>;
+  using ThermalFrame =
+      Eigen::Matrix<uint16_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
   /**
    * Copies and existing IRImager object.
