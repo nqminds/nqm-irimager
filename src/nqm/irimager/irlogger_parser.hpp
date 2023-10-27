@@ -13,8 +13,8 @@
  */
 class IRLoggerParser {
  public:
-  IRLoggerParser(LoggingCallback _logging_callback)
-      : logging_callback{_logging_callback} {}
+  IRLoggerParser(LoggingCallback logging_callback)
+      : logging_callback_{logging_callback} {}
 
   /**
    * Push some data into the IRLoggerParser, automatically calling the
@@ -33,9 +33,9 @@ class IRLoggerParser {
   static constexpr std::size_t STRING_BUFFER_SIZE = 1 << 20;  // 1 MiB
 
  private:
-  LoggingCallback logging_callback;
+  LoggingCallback logging_callback_;
 
-  StringRingBuffer<STRING_BUFFER_SIZE> buffer;
+  StringRingBuffer<STRING_BUFFER_SIZE> buffer_;
 
   /**
    * @brief Tries to parse a log line from the internal buffer.

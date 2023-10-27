@@ -41,12 +41,13 @@ extern "C" {
 /** RAII wrapper to handle reading from a POSIX FIFO */
 class PosixFileReadOnly {
  public:
-  PosixFileReadOnly(const std::filesystem::path &_path) : path{_path} {
-    posix_file_descriptor = open(path.string().c_str(), O_RDONLY | O_NONBLOCK);
-    if (posix_file_descriptor == -1) {
+  PosixFileReadOnly(const std::filesystem::path &path) : path_{path} {
+    posix_file_descriptor_ =
+        open(path_.string().c_str(), O_RDONLY | O_NONBLOCK);
+    if (posix_file_descriptor_ == -1) {
       auto exception =
           std::system_error(std::error_code(errno, std::system_category()));
-      spdlog::error("Failed to open file at {} due to {}", path.string(),
+      spdlog::error("Failed to open file at {} due to {}", path_.string(),
                     exception.what());
       throw exception;
     }
@@ -64,7 +65,7 @@ class PosixFileReadOnly {
   template <class C>
   std::size_t try_read(C &buffer) {
     ssize_t bytes =
-        read(posix_file_descriptor, std::data(buffer), std::size(buffer));
+        read(posix_file_descriptor_, std::data(buffer), std::size(buffer));
     if (bytes <= -1) {
       switch (errno) {
         case EINTR:
@@ -74,7 +75,7 @@ class PosixFileReadOnly {
         default: {
           auto exception =
               std::system_error(std::error_code(errno, std::system_category()));
-          spdlog::error("Failed to read file at {} due to {}", path.string(),
+          spdlog::error("Failed to read file at {} due to {}", path_.string(),
                         exception.what());
           throw exception;
         }
@@ -86,7 +87,7 @@ class PosixFileReadOnly {
   virtual ~PosixFileReadOnly() {
     constexpr int MAX_RETRIES = 128;
     for (int i = 0; i < MAX_RETRIES; i++) {
-      if (close(posix_file_descriptor) == 0) {
+      if (close(posix_file_descriptor_) == 0) {
         return;
       }
       if (errno == EINTR) {
@@ -94,7 +95,7 @@ class PosixFileReadOnly {
       } else {
         auto exception =
             std::system_error(std::error_code(errno, std::system_category()));
-        spdlog::error("Failed to close file at {} due to {}", path.string(),
+        spdlog::error("Failed to close file at {} due to {}", path_.string(),
                       exception.what());
         return;
       }
@@ -102,14 +103,14 @@ class PosixFileReadOnly {
     auto exception =
         std::system_error(std::error_code(EINTR, std::system_category()));
     spdlog::error("Failed to close file at {} after {} iterations due to {}",
-                  path.string(), MAX_RETRIES, exception.what());
+                  path_.string(), MAX_RETRIES, exception.what());
   }
 
-  int fd() { return posix_file_descriptor; }
+  int fd() { return posix_file_descriptor_; }
 
  private:
-  int posix_file_descriptor = -1;
-  std::filesystem::path path;
+  int posix_file_descriptor_ = -1;
+  std::filesystem::path path_;
 };
 
 /**
@@ -118,9 +119,9 @@ class PosixFileReadOnly {
  */
 class IRLoggerReader {
  public:
-  IRLoggerReader(LoggingCallback _logging_callback,
+  IRLoggerReader(LoggingCallback logging_callback,
                  const std::filesystem::path &socket_path)
-      : ir_logger_parser{_logging_callback} {
+      : ir_logger_parser_{logging_callback} {
     start_thread(socket_path);
   }
 
@@ -147,10 +148,10 @@ class IRLoggerReader {
     }
 
     spdlog::debug("starting thread");
-    logger_thread = std::async(std::launch::async, [this, socket_path]() {
+    logger_thread_ = std::async(std::launch::async, [this, socket_path]() {
       spdlog::debug("Started new thread to read from {}", socket_path.string());
 
-      thread_handle = pthread_self();
+      thread_handle_ = pthread_self();
 
       // Ignore SIGUSR1 signals on this thread.
       // POSIX functions will be interrupted and fail with EINTR
@@ -177,9 +178,9 @@ class IRLoggerReader {
 
       auto read_buffer = std::array<char, 1024>();
 
-      while (stop == false) {
+      while (stop_ == false) {
         /*
-         * Check every 5 seconds if `stop == true`.
+         * Check every 5 seconds if `stop_ == true`.
          *
          * Normally, poll() should immediately throw an EINTR when a USRSIG1
          * signal is caught, but for reason, this only works some of the
@@ -222,38 +223,38 @@ class IRLoggerReader {
 
   void stop_thread() {
     auto no_gil = pybind11::gil_scoped_release();
-    stop = true;
+    stop_ = true;
 
-    auto thread_handle_value = thread_handle.load();
+    auto thread_handle_value = thread_handle_.load();
     if (thread_handle_value) {
       // this should interrupt any slow read() or poll() commands, and make
       // the child thread exit faster (although it only works most of the time)
       pthread_kill(thread_handle_value, SIGUSR1);
     }
-    logger_thread.get();
+    logger_thread_.get();
   }
 
-  std::shared_future<void> logger_thread;
+  std::shared_future<void> logger_thread_;
 
   /** If `true`, stop the logger thread */
-  std::atomic<bool> stop = false;
+  std::atomic<bool> stop_ = false;
 
   /**
    * Logging thread handle, only used to send signals to the child thread to
    * interrupt it (stops it quicker).
    */
-  std::atomic<pthread_t> thread_handle = 0;
+  std::atomic<pthread_t> thread_handle_ = 0;
 
   /**
    * Handles parsing the logs.
    */
-  IRLoggerParser ir_logger_parser;
+  IRLoggerParser ir_logger_parser_;
 
   /*
    * Handle some bytes from the log file
    */
   void handle_bytes(const char *bytes, std::size_t size) {
-    ir_logger_parser.push_data(bytes, size);
+    ir_logger_parser_.push_data(bytes, size);
   }
 };
 
@@ -294,7 +295,7 @@ class IRLoggerImpl {
  public:
   IRLoggerImpl(const std::filesystem::path &socket_path_prefix) {
     auto real_socket_path = irlogger_log_path(socket_path_prefix);
-    irlogger_mock_thread = std::async(
+    irlogger_mock_thread_ = std::async(
         std::launch::async,
         [real_socket_path,  // by-copy capture, since this will run in another
                             // thread
@@ -302,7 +303,7 @@ class IRLoggerImpl {
           auto out = std::ofstream(real_socket_path);
           out << "WARNING [irlogger_to_spd_posix.cpp:" << __LINE__
               << "] @ 0.01s :Mocking IRLogger output." << std::endl;
-          for (int i = 0; i < 3600 && !this->stop; i++) {
+          for (int i = 0; i < 3600 && !this->stop_; i++) {
             out << "DEBUG [irlogger_to_spd_posix.cpp:" << __LINE__ << "] @ "
                 << i << "s :This is some dummy mocked IRLogger output."
                 << std::endl;
@@ -314,13 +315,13 @@ class IRLoggerImpl {
   ~IRLoggerImpl() { stop_thread(); }
 
  private:
-  std::shared_future<void> irlogger_mock_thread;
-  std::atomic<bool> stop = false;
+  std::shared_future<void> irlogger_mock_thread_;
+  std::atomic<bool> stop_ = false;
 
   void stop_thread() {
     auto no_gil = pybind11::gil_scoped_release();
-    stop = true;
-    irlogger_mock_thread.get();
+    stop_ = true;
+    irlogger_mock_thread_.get();
   }
 };
 #else /* IR_IMAGER_MOCK */
@@ -412,12 +413,12 @@ struct IRLoggerToSpd::impl {
  public:
   impl(const LoggingCallback &logging_callback,
        const std::filesystem::path &socket_path)
-      : log_file_reader(logging_callback, irlogger_log_path(socket_path)),
-        irlogger_impl(socket_path) {}
+      : log_file_reader_(logging_callback, irlogger_log_path(socket_path)),
+        irlogger_impl_(socket_path) {}
 
  private:
-  IRLoggerReader log_file_reader;
-  IRLoggerImpl irlogger_impl;
+  IRLoggerReader log_file_reader_;
+  IRLoggerImpl irlogger_impl_;
 };
 
 /**
@@ -450,10 +451,10 @@ IRLoggerToSpd::IRLoggerToSpd(const LoggingCallback &logging_callback)
 IRLoggerToSpd::IRLoggerToSpd(const LoggingCallback &logging_callback,
                              const std::filesystem::path &socket_path) {
   auto gil = pybind11::gil_scoped_acquire();
-  pImpl = std::make_unique<IRLoggerToSpd::impl>(logging_callback, socket_path);
+  pImpl_ = std::make_unique<IRLoggerToSpd::impl>(logging_callback, socket_path);
 }
 
 IRLoggerToSpd::~IRLoggerToSpd() {
   auto gil = pybind11::gil_scoped_acquire();
-  pImpl = nullptr;
+  pImpl_ = nullptr;
 }

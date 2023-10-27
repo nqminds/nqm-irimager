@@ -42,7 +42,7 @@ class IRLoggerToSpd {
  private:
   // pImpl, see https://en.cppreference.com/w/cpp/language/pimpl
   std::experimental::fundamentals_v2::propagate_const<std::unique_ptr<impl>>
-      pImpl;
+      pImpl_;
 };
 
 #endif /** NQM_IRIMAGER_IRLOGGER_TO_SPD */
