@@ -35,7 +35,7 @@ struct IRImager::impl {
   virtual void stop_streaming() { streaming = false; }
 
   /** @copydoc IRImager::get_frame() */
-  virtual std::tuple<Eigen::Matrix<uint16_t, Eigen::Dynamic, Eigen::Dynamic>,
+  virtual std::tuple<IRImager::ThermalFrame,
                      std::chrono::system_clock::time_point>
   get_frame() {
     if (!streaming) {
@@ -45,9 +45,8 @@ struct IRImager::impl {
     auto frame_size = std::array<ssize_t, 2>{382, 288};
     auto max_value = static_cast<uint16_t>(
         (1800 + 100) * std::pow(10, get_temp_range_decimal()));
-    auto my_array =
-        Eigen::Matrix<uint16_t, Eigen::Dynamic, Eigen::Dynamic>::Constant(
-            frame_size[0], frame_size[1], max_value);
+    auto my_array = IRImager::ThermalFrame::Constant(frame_size[0],
+                                                     frame_size[1], max_value);
 
     return std::make_tuple(my_array, std::chrono::system_clock::now());
   }
@@ -132,8 +131,7 @@ void IRImager::start_streaming() { pImpl->start_streaming(); }
 
 void IRImager::stop_streaming() { pImpl->stop_streaming(); }
 
-std::tuple<Eigen::Matrix<uint16_t, Eigen::Dynamic, Eigen::Dynamic>,
-           std::chrono::system_clock::time_point>
+std::tuple<IRImager::ThermalFrame, std::chrono::system_clock::time_point>
 IRImager::get_frame() {
   return pImpl->get_frame();
 }

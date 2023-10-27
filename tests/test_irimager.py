@@ -64,6 +64,7 @@ def test_irimager_get_frame():
         # should be 2-dimensional
         assert array.ndim == 2
         assert array.shape == (382, 288)
+        assert array.flags["C_CONTIGUOUS"]  # check if the array is row-major
 
         # image should have been taken in the last 30 seconds
         assert timestamp > datetime.datetime.now() - datetime.timedelta(seconds=30)

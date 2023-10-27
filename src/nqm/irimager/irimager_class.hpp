@@ -18,6 +18,14 @@
 class IRImager {
  public:
   /**
+   * Thermal frame matrix.
+   *
+   * Uses Row-major order for better compatibility with Numpy.
+   */
+  using ThermalFrame =
+      Eigen::Matrix<uint16_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+
+  /**
    * Copies and existing IRImager object.
    */
   IRImager(const IRImager &);
@@ -81,9 +89,7 @@ class IRImager {
    *           actual temperature in degrees Celcius.
    *         2. The time the image was taken.
    */
-  std::tuple<Eigen::Matrix<uint16_t, Eigen::Dynamic, Eigen::Dynamic>,
-             std::chrono::system_clock::time_point>
-  get_frame();
+  std::tuple<ThermalFrame, std::chrono::system_clock::time_point> get_frame();
 
   /**
    * The number of decimal places in the thermal data
