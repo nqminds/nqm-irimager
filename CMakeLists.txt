@@ -47,6 +47,7 @@ add_custom_command(
     "-I;$<JOIN:$<TARGET_PROPERTY:irimager,INCLUDE_DIRECTORIES>,;-I;>"
     -std=c++17
     "${CMAKE_CURRENT_SOURCE_DIR}/src/nqm/irimager/irimager_class.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/nqm/irimager/logger.hpp"
   COMMAND_EXPAND_LISTS
   VERBATIM
 )
@@ -109,6 +110,22 @@ else()
   target_link_libraries(irimager_class PRIVATE IRImager::IRImager)
 endif(IRImager_mock)
 
+add_library(logger OBJECT
+  "src/nqm/irimager/logger.cpp"
+)
+set_target_properties(logger PROPERTIES
+  PRIVATE_HEADER
+    "src/nqm/irimager/logger.hpp"
+  POSITION_INDEPENDENT_CODE ON # -fPIC
+)
+target_compile_definitions(logger PRIVATE "${IRImager_DEFINITIONS}")
+target_link_libraries(logger
+  PUBLIC
+    pybind11::pybind11
+  PRIVATE
+    spdlog::spdlog_header_only
+)
+
 pybind11_add_module(irimager MODULE
   "src/nqm/irimager/irimager.cpp"
   "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
@@ -122,6 +139,7 @@ target_link_libraries(irimager
   PRIVATE
     pybind11::headers
     irimager_class
+    logger
 )
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)

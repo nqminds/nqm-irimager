@@ -7,6 +7,7 @@
 #include <pybind11/stl_bind.h>
 
 #include "./irimager_class.hpp"
+#include "./logger.hpp"
 
 #ifndef DOCSTRINGS_H
 #error DOCSTRINGS_H must be defined to the output of pybind11_mkdocs
@@ -72,4 +73,7 @@ to control these cameras.)";
       .def("__enter__", &IRImager_enter_,
            pybind11::return_value_policy::reference_internal, no_gil)
       .def("__exit__", &IRImager_exit_);
+
+  pybind11::class_<Logger>(m, "Logger", DOC(Logger))
+      .def(pybind11::init<>(), DOC(Logger, Logger));
 }
