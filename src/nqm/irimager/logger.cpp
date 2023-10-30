@@ -33,14 +33,14 @@ static LogLevel spd_level_to_irimager_level(
 
 struct Logger::impl {
  public:
-  inline static std::weak_ptr<Logger::impl> singleton;
-  inline static std::mutex singleton_mutex;
+  inline static std::weak_ptr<Logger::impl> singleton_;
+  inline static std::mutex singleton_mutex_;
 
   /**
    * @brief Construct a new impl object, redirecting logs to `logging_callback`.
    *
    * This function is not thread-safe, and should be protected by
-   * singleton_mutex.
+   * singleton_mutex_.
    *
    * @param logging_callback The function to call with log data.
    */
@@ -51,20 +51,20 @@ struct Logger::impl {
 
     // construct after calling redirect_spd, so we can see logs during
     // construction
-    ir_logger_to_spd = std::make_unique<IRLoggerToSpd>(logging_callback);
+    ir_logger_to_spd_ = std::make_unique<IRLoggerToSpd>(logging_callback);
   }
 
   virtual ~impl() {
-    ir_logger_to_spd = nullptr;
+    ir_logger_to_spd_ = nullptr;
     reset_spd_redirect();
   }
 
  private:
   /** If we've called redirect_spd(), this var stores the original logger */
-  std::shared_ptr<spdlog::logger> old_logger;
+  std::shared_ptr<spdlog::logger> old_logger_;
 
   /** Handles piping IRImageSDK logs to spdlog */
-  std::unique_ptr<IRLoggerToSpd> ir_logger_to_spd;
+  std::unique_ptr<IRLoggerToSpd> ir_logger_to_spd_;
 
   /** Redirects calls to `spdlog::log()` in C++ to the given callback */
   void redirect_spd(LoggingCallback logging_callback) {
@@ -86,7 +86,7 @@ struct Logger::impl {
     auto callback_logger =
         std::make_shared<spdlog::logger>("callback_sink", callback_sink);
 
-    old_logger = spdlog::default_logger();
+    old_logger_ = spdlog::default_logger();
     spdlog::set_default_logger(callback_logger);
 
     // pass all spdlogs to the callback
@@ -96,11 +96,11 @@ struct Logger::impl {
   }
 
   void reset_spd_redirect() {
-    if (!old_logger) {
+    if (!old_logger_) {
       return;
     }
-    spdlog::set_default_logger(old_logger);
-    old_logger = nullptr;
+    spdlog::set_default_logger(old_logger_);
+    old_logger_ = nullptr;
   }
 };
 
@@ -119,8 +119,8 @@ static pybind11::object default_logger() {
 Logger::Logger(LoggingCallback logging_callback) {
   auto no_gil =
       pybind11::gil_scoped_release();  // release gil to avoid deadlock
-  auto singleton_lock = std::scoped_lock(Logger::impl::singleton_mutex);
-  if (Logger::impl::singleton.use_count()) {
+  auto singleton_lock = std::scoped_lock(Logger::impl::singleton_mutex_);
+  if (Logger::impl::singleton_.use_count()) {
     throw std::runtime_error(
         "Only a single instance of the Logger should be active at the same "
         "time.");
@@ -128,8 +128,8 @@ Logger::Logger(LoggingCallback logging_callback) {
 
   {
     auto gil = pybind11::gil_scoped_acquire();
-    pImpl = std::make_shared<Logger::impl>(logging_callback);
-    Logger::impl::singleton = pImpl;
+    pImpl_ = std::make_shared<Logger::impl>(logging_callback);
+    Logger::impl::singleton_ = pImpl_;
   }
 }
 
@@ -141,10 +141,10 @@ Logger::Logger() : Logger::Logger(default_logger()) {}
 Logger::~Logger() {
   // release Python GIL, to avoid deadlocks
   auto no_gil = pybind11::gil_scoped_release();
-  auto singleton_lock = std::scoped_lock(Logger::impl::singleton_mutex);
+  auto singleton_lock = std::scoped_lock(Logger::impl::singleton_mutex_);
 
   {
     auto gil = pybind11::gil_scoped_acquire();
-    pImpl = nullptr;
+    pImpl_ = nullptr;
   }
 }

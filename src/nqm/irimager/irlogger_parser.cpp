@@ -53,26 +53,26 @@ void IRLoggerParser::push_data(const char *data, std::size_t length) {
 }
 
 void IRLoggerParser::push_data(std::string_view data) {
-  if (buffer.size() + data.size() <= STRING_BUFFER_SIZE) {
-    buffer.insert(data);
+  if (buffer_.size() + data.size() <= STRING_BUFFER_SIZE) {
+    buffer_.insert(data);
 
     while (try_parse())
       ;
   } else {
-    if (STRING_BUFFER_SIZE == buffer.size()) {
+    if (STRING_BUFFER_SIZE == buffer_.size()) {
       // buffer is full, log and dump buffer
-      logging_callback(
+      logging_callback_(
           LogLevel::warn,
           "IRLoggerParser ring buffer overflow, dumped contents are: " +
-              buffer.peek());
-      buffer.discard(buffer.size());  // empty buffer
+              buffer_.peek());
+      buffer_.discard(buffer_.size());  // empty buffer
     }
 
     auto data_to_insert_now =
-        data.substr(0, STRING_BUFFER_SIZE - buffer.size());
+        data.substr(0, STRING_BUFFER_SIZE - buffer_.size());
 
     // try pushing only a subset of the data
-    buffer.insert(data_to_insert_now);
+    buffer_.insert(data_to_insert_now);
 
     while (try_parse())
       ;
@@ -84,7 +84,7 @@ void IRLoggerParser::push_data(std::string_view data) {
 }
 
 bool IRLoggerParser::try_parse() {
-  auto buffer_contents = buffer.peek();
+  auto buffer_contents = buffer_.peek();
 
   auto index = buffer_contents.find("\n");
 
@@ -94,14 +94,14 @@ bool IRLoggerParser::try_parse() {
 
   // line not including `\n` character
   auto line = buffer_contents.substr(0, index);
-  buffer.discard(index + 1);  // discard line **AND** `\n` character
+  buffer_.discard(index + 1);  // discard line **AND** `\n` character
 
   try {
     auto [log_level, message] = parse_line(line);
-    logging_callback(log_level, message);
+    logging_callback_(log_level, message);
   } catch (std::exception &e) {
     // prevent exceptions from crashing the program.
-    logging_callback(
+    logging_callback_(
         LogLevel::warn,
         std::string("Failed to parse IRLogger line due to error: ") + e.what() +
             " Line was " + line);

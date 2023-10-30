@@ -40,16 +40,16 @@ struct IRImager::impl {
   }
 
   /** @copydoc IRImager::start_streaming() */
-  virtual void start_streaming() { streaming = true; }
+  virtual void start_streaming() { streaming_ = true; }
 
   /** @copydoc IRImager::stop_streaming() */
-  virtual void stop_streaming() { streaming = false; }
+  virtual void stop_streaming() { streaming_ = false; }
 
   /** @copydoc IRImager::get_frame() */
   virtual std::tuple<IRImager::ThermalFrame,
                      std::chrono::system_clock::time_point>
   get_frame() {
-    if (!streaming) {
+    if (!streaming_) {
       throw std::runtime_error("IRIMAGER_STREAMOFF: Not streaming");
     }
 
@@ -71,7 +71,7 @@ struct IRImager::impl {
   virtual ~impl() = default;
 
  protected:
-  bool streaming = false;
+  bool streaming_ = false;
 };
 
 /**
@@ -163,7 +163,7 @@ struct IRImagerRealImpl final : public IRImager::impl {
   IRImagerRealImpl(const IRImager::impl &other) : IRImager::impl(other) {
     auto other_real = dynamic_cast<const IRImagerRealImpl *>(&other);
     if (other_real != nullptr) {
-      ir_device = other_real->ir_device;
+      ir_device_ = other_real->ir_device_;
     }
   }
 
@@ -187,15 +187,15 @@ struct IRImagerRealImpl final : public IRImager::impl {
                    xml_path.string());
     }
 
-    ir_device.reset(evo::IRDevice::IRCreateDevice(params));
+    ir_device_.reset(evo::IRDevice::IRCreateDevice(params));
 
-    if (ir_device == nullptr) {
+    if (ir_device_ == nullptr) {
       throw std::runtime_error("Failed to create IRDevice");
     }
 
-    ir_imager.init(&params, ir_device->getFrequency(), ir_device->getWidth(),
-                   ir_device->getHeight(), ir_device->controlledViaHID());
-    ir_imager.setThermalFrameCallback(&onThermalFrame);
+    ir_imager_.init(&params, ir_device_->getFrequency(), ir_device_->getWidth(),
+                    ir_device_->getHeight(), ir_device_->controlledViaHID());
+    ir_imager_.setThermalFrameCallback(&onThermalFrame);
   }
 
   virtual ~IRImagerRealImpl() = default;
@@ -203,7 +203,7 @@ struct IRImagerRealImpl final : public IRImager::impl {
   void start_streaming() override {
     // despite what the docs say, startStreaming() returns 0 on success, non-0
     // on failure
-    if (ir_device->startStreaming() != 0) {
+    if (ir_device_->startStreaming() != 0) {
       throw std::runtime_error(
           "Error occurred in starting stream. You may need to reconnect the "
           "camera.");
@@ -213,7 +213,7 @@ struct IRImagerRealImpl final : public IRImager::impl {
   virtual void stop_streaming() override {
     // despite what the docs say, stopStreaming() returns 0 on success, non-0 on
     // failure
-    if (ir_device->stopStreaming() != 0) {
+    if (ir_device_->stopStreaming() != 0) {
       throw std::runtime_error("Error occurred in stopping stream.");
     }
   }
@@ -221,32 +221,32 @@ struct IRImagerRealImpl final : public IRImager::impl {
   std::tuple<IRImager::ThermalFrame, std::chrono::system_clock::time_point>
   get_frame() override {
     auto raw_frame_bytes =
-        std::vector<unsigned char>(ir_device->getRawBufferSize());
+        std::vector<unsigned char>(ir_device_->getRawBufferSize());
     /** time of frame, in monotonic seconds since std::chrono::steady_clock */
     double timestamp;
     evo::IRDeviceError device_error =
-        ir_device->getFrame(raw_frame_bytes.data(), &timestamp);
+        ir_device_->getFrame(raw_frame_bytes.data(), &timestamp);
     if (device_error != evo::IRIMAGER_SUCCESS) {
       throw IRDeviceException(device_error);
     }
 
-    ir_imager.process(raw_frame_bytes.data(), static_cast<void *>(this));
+    ir_imager_.process(raw_frame_bytes.data(), static_cast<void *>(this));
 
     std::variant<IRImager::ThermalFrame, BadFrame, nullptr_t>
         thermal_data_result = nullptr;
     {
-      // wait until ir_imager.process() calls the
-      // IRImager::impl::onThermalFrame callback and fills @p thermal_data
-      auto lk = std::unique_lock(mutex);
+      // wait until ir_imager_.process() calls the
+      // IRImager::impl::onThermalFrame callback and fills @p thermal_data_
+      auto lk = std::unique_lock(mutex_);
 
-      if (thermal_data_available.wait_for(lk, std::chrono::seconds(30), [&] {
-            return !std::holds_alternative<nullptr_t>(thermal_data);
+      if (thermal_data_available_.wait_for(lk, std::chrono::seconds(30), [&] {
+            return !std::holds_alternative<nullptr_t>(thermal_data_);
           }) == false) {
         throw std::runtime_error(
             "Timeout when waiting for a new thermal frame");
       }
 
-      thermal_data_result.swap(thermal_data);
+      thermal_data_result.swap(thermal_data_);
     }
 
     if (std::holds_alternative<BadFrame>(thermal_data_result)) {
@@ -292,8 +292,8 @@ struct IRImagerRealImpl final : public IRImager::impl {
   }
 
  private:
-  std::shared_ptr<evo::IRDevice> ir_device;
-  evo::IRImager ir_imager;
+  std::shared_ptr<evo::IRDevice> ir_device_;
+  evo::IRImager ir_imager_;
 
   /**
    * Enum that explains why a frame might be bad.
@@ -304,27 +304,27 @@ struct IRImagerRealImpl final : public IRImager::impl {
   };
 
   /**
-   * Locks the ::thermal_data_available and ::thermal_data attributes.
+   * Locks the ::thermal_data_available_ and ::thermal_data_ attributes.
    */
-  std::mutex mutex;
+  std::mutex mutex_;
   /**
-   * Notifies that the ::thermal_data param holds data.
+   * Notifies that the ::thermal_data_ param holds data.
    */
-  std::condition_variable thermal_data_available;
+  std::condition_variable thermal_data_available_;
   /**
    * Either a:
    *   - IRImager::ThermalFrame, containing the thermal frame,
    *   - ::BadFrame, containing an enum on why the frame is bad,
    *   - or `nullptr`, which means there is no frame data.
    */
-  std::variant<IRImager::ThermalFrame, BadFrame, nullptr_t> thermal_data =
+  std::variant<IRImager::ThermalFrame, BadFrame, nullptr_t> thermal_data_ =
       nullptr;
 
   /**
    * Thermal frame callback function.
    *
-   * Stores the thermal frame in the ::thermal_data attribute, then sends a
-   * notification on ::thermal_data_available to let any listeners know that
+   * Stores the thermal frame in the ::thermal_data_ attribute, then sends a
+   * notification on ::thermal_data_available_ to let any listeners know that
    * a frame has arrived.
    *
    * @param[in] thermal Thermal data 2D-array.
@@ -342,26 +342,26 @@ struct IRImagerRealImpl final : public IRImager::impl {
                              void *arg) {
     auto data = static_cast<IRImagerRealImpl *>(arg);
     {
-      auto lock = std::scoped_lock(data->mutex);
+      auto lock = std::scoped_lock(data->mutex_);
 
-      if (!std::holds_alternative<nullptr_t>(data->thermal_data)) {
+      if (!std::holds_alternative<nullptr_t>(data->thermal_data_)) {
         spdlog::warn(
-            "thermal_data is not empty, this might occur due to calling "
+            "thermal_data_ is not empty, this might occur due to calling "
             "`get_frame()` before the previous `get_frame()` is finished");
       }
 
-      if (data->ir_imager.isFlagOpen()) {
+      if (data->ir_imager_.isFlagOpen()) {
         // TODO: evo::IRImager doesn't mention if data is RowMajor/ColumnMajor
         //       so we're assuming it's RowMajor.
         auto array = Eigen::Map<IRImager::ThermalFrame>(thermal, w, h);
 
-        data->thermal_data = std::move(array);
+        data->thermal_data_ = std::move(array);
       } else {
         // shutter is down, frame data is bad
-        data->thermal_data = BadFrame::SHUTTER_CLOSED;
+        data->thermal_data_ = BadFrame::SHUTTER_CLOSED;
       }
     }
-    data->thermal_data_available.notify_one();
+    data->thermal_data_available_.notify_one();
   }
 };
 
@@ -371,37 +371,37 @@ struct IRImagerRealImpl final : public IRImager::impl {
 IRImager::IRImager() = default;
 
 IRImager::IRImager(const IRImager &other)
-    : pImpl{std::make_unique<IRImagerDefaultImplementation>(*other.pImpl)} {}
+    : pImpl_{std::make_unique<IRImagerDefaultImplementation>(*other.pImpl_)} {}
 
 IRImager::IRImager(IRImager &&other) = default;
 
 IRImager::IRImager(const std::filesystem::path &xml_path)
-    : pImpl{std::make_unique<IRImagerDefaultImplementation>(xml_path)} {}
+    : pImpl_{std::make_unique<IRImagerDefaultImplementation>(xml_path)} {}
 
 IRImager::IRImager(const char *xml_path, std::size_t xml_path_len)
     : IRImager(std::string(xml_path, xml_path_len)) {}
 
 IRImager::~IRImager() = default;
 
-void IRImager::start_streaming() { pImpl->start_streaming(); }
+void IRImager::start_streaming() { pImpl_->start_streaming(); }
 
-void IRImager::stop_streaming() { pImpl->stop_streaming(); }
+void IRImager::stop_streaming() { pImpl_->stop_streaming(); }
 
 std::tuple<IRImager::ThermalFrame, std::chrono::system_clock::time_point>
 IRImager::get_frame() {
-  return pImpl->get_frame();
+  return pImpl_->get_frame();
 }
 
 short IRImager::get_temp_range_decimal() {
-  return pImpl->get_temp_range_decimal();
+  return pImpl_->get_temp_range_decimal();
 }
 
 std::string_view IRImager::get_library_version() {
-  return pImpl->get_library_version();
+  return pImpl_->get_library_version();
 }
 
 IRImagerMock::IRImagerMock(const std::filesystem::path &xml_path) {
-  pImpl = std::make_unique<IRImagerMockImpl>(xml_path);
+  pImpl_ = std::make_unique<IRImagerMockImpl>(xml_path);
 }
 
 IRImagerMock::IRImagerMock(const char *xml_path, std::size_t xml_path_len)

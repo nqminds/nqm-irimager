@@ -45,7 +45,7 @@ class Logger {
 
  private:
   // pImpl, see https://en.cppreference.com/w/cpp/language/pimpl
-  std::shared_ptr<impl> pImpl;
+  std::shared_ptr<impl> pImpl_;
 };
 
 #endif /* NQM_IRIMAGER_LOGGER */
