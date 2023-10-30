@@ -47,12 +47,20 @@ class IRImager:
     def get_frame(self) -> typing.Tuple[npt.NDArray[np.uint16], datetime.datetime]:
         """Return a frame
 
+        If the shutter is down (normally done automatically by the thermal
+        camera for calibration), this function will wait until the shutter is
+        back up, before returning (usually around ~1s).
+
+        Throws:
+            RuntimeError if a frame cannot be loaded, e.g. if the camera isn't
+            streaming.
+
         Returns:
             A tuple containing:
-                - A 2-D matrix containing the image. This must be adjusted
-                  by :py:meth:`~IRImager.get_temp_range_decimal` to get the
-                  actual temperature in degrees Celcius.
-                - The time the image was taken.
+              1. A 2-D matrix containing the image. This must be adjusted by
+                 :py:meth:`~IRImager.get_temp_range_decimal` to get the actual
+                 temperature in degrees Celcius, offset from -100 ℃.
+              2. The time the image was taken.
         """
     def get_temp_range_decimal(self) -> int:
         """The number of decimal places in the thermal data
