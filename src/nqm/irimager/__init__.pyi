@@ -101,3 +101,19 @@ class Logger:
     def __init__(self) -> None:
         """Creates a new logger using the default Python :py:class:`logging.Logger`"""
     def __del__(self): ...
+
+class LoggerContextManager:
+    """Context Manager around a Logger object.
+
+    Designed for use with Python's ``with`` syntax.
+    """
+
+    def __enter__(self) -> None:
+        """Starts the logger if it's not already started."""
+    def __exit__(
+        self,
+        exc_type: typing.Optional[typing.Type[BaseException]],
+        exc: typing.Optional[BaseException],
+        traceback: typing.Optional[types.TracebackType],
+    ) -> None:
+        """Stops the logger"""

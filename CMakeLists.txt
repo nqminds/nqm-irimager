@@ -47,6 +47,7 @@ add_custom_command(
     "-I;$<JOIN:$<TARGET_PROPERTY:irimager,INCLUDE_DIRECTORIES>,;-I;>"
     -std=c++17
     "${CMAKE_CURRENT_SOURCE_DIR}/src/nqm/irimager/irimager_class.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/nqm/irimager/logger_context_manager.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/nqm/irimager/logger.hpp"
   COMMAND_EXPAND_LISTS
   VERBATIM
@@ -165,6 +166,19 @@ target_link_libraries(logger
     irlogger_to_spd
 )
 
+add_library(logger_context_manager OBJECT
+  "src/nqm/irimager/logger_context_manager.cpp"
+)
+set_target_properties(logger_context_manager PROPERTIES
+  PRIVATE_HEADER
+    "src/nqm/irimager/logger_context_manager.hpp"
+  POSITION_INDEPENDENT_CODE ON # -fPIC
+)
+target_link_libraries(logger_context_manager
+  PUBLIC
+    logger
+)
+
 pybind11_add_module(irimager MODULE
   "src/nqm/irimager/irimager.cpp"
   "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
@@ -180,6 +194,7 @@ target_link_libraries(irimager
     irimager_class
     irlogger_parser
     irlogger_to_spd
+    logger_context_manager
     logger
 )
 

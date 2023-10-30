@@ -8,6 +8,7 @@
 
 #include "./irimager_class.hpp"
 #include "./logger.hpp"
+#include "./logger_context_manager.hpp"
 
 #ifndef DOCSTRINGS_H
 #error DOCSTRINGS_H must be defined to the output of pybind11_mkdocs
@@ -76,4 +77,16 @@ to control these cameras.)";
 
   pybind11::class_<Logger>(m, "Logger", DOC(Logger))
       .def(pybind11::init<>(), DOC(Logger, Logger));
+
+  pybind11::class_<LoggerContextManager>(m, "LoggerContextManager",
+                                         DOC(LoggerContextManager))
+      .def(pybind11::init<>())
+      .def("__enter__", &LoggerContextManager::start)
+      .def("__exit__",
+           [](LoggerContextManager *logger_cm,
+              [[maybe_unused]] const std::optional<pybind11::type>,
+              [[maybe_unused]] const std::optional<pybind11::object>,
+              [[maybe_unused]] const std::optional<pybind11::object>) {
+             logger_cm->stop();
+           });
 }
