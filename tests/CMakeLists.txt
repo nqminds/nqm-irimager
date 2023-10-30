@@ -17,3 +17,11 @@ target_link_libraries(test_irimager_class
     Python::Python
     irimager_class
 )
+
+add_executable(test_string_ring_buffer
+  test_string_ring_buffer.cpp
+)
+target_link_libraries(test_string_ring_buffer
+  PRIVATE
+    GTest::gtest_main
+)
