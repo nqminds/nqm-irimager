@@ -120,6 +120,34 @@ set_target_properties(irlogger_parser PROPERTIES
   POSITION_INDEPENDENT_CODE ON # -fPIC
 )
 
+if (UNIX)
+  add_library(irlogger_to_spd OBJECT
+    "src/nqm/irimager/irlogger_to_spd_posix.cpp"
+  )
+else()
+  message(FATAL_ERROR "The nqm.irimager package only currently supports POSIX/UNIX systems.")
+endif()
+
+set_target_properties(irlogger_to_spd PROPERTIES
+  PRIVATE_HEADER
+    "src/nqm/irimager/irlogger_to_spd.hpp"
+  POSITION_INDEPENDENT_CODE ON # -fPIC
+)
+target_link_libraries(irlogger_to_spd
+  PUBLIC
+    propagate_const::propagate_const
+  PRIVATE
+    pybind11::pybind11
+    spdlog::spdlog_header_only
+    irlogger_parser
+)
+
+if(IRImager_mock)
+  target_compile_definitions(irlogger_to_spd PRIVATE IR_IMAGER_MOCK)
+elseif()
+  target_link_libraries(irlogger_to_spd PRIVATE IRImager::IRCore)
+endif()
+
 add_library(logger OBJECT
   "src/nqm/irimager/logger.cpp"
 )
@@ -134,6 +162,7 @@ target_link_libraries(logger
     pybind11::pybind11
   PRIVATE
     spdlog::spdlog_header_only
+    irlogger_to_spd
 )
 
 pybind11_add_module(irimager MODULE
@@ -149,6 +178,8 @@ target_link_libraries(irimager
   PRIVATE
     pybind11::headers
     irimager_class
+    irlogger_parser
+    irlogger_to_spd
     logger
 )
 
