@@ -92,9 +92,21 @@ class IRImager {
    *         1. A 2-D matrix containing the image. This must be adjusted
    *           by :py:meth:`~IRImager.get_temp_range_decimal` to get the
    *           actual temperature in degrees Celcius, offset from -100 ℃.
-   *         2. The time the image was taken.
+   *         2. The approximate time the image was taken.
    */
   std::tuple<ThermalFrame, std::chrono::system_clock::time_point> get_frame();
+
+  /**
+   * @brief Return a frame, with a monotonic/steady_clock timestamp.
+   *
+   * Similar to :py:meth:`get_frame`, except returns a monotonic timepoint that
+   * the IRImagerDirectSDK returns, which is more accurate.
+   *
+   * Please be aware that the epoch of the monotonic timepoint is undefined,
+   * and may be the time since last boot or the time since the program started.
+   */
+  std::tuple<ThermalFrame, std::chrono::steady_clock::time_point>
+  get_frame_monotonic();
 
   /**
    * The number of decimal places in the thermal data

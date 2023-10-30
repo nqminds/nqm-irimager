@@ -79,6 +79,24 @@ def test_irimager_get_frame():
         assert timestamp > datetime.datetime.now() - datetime.timedelta(seconds=30)
 
 
+def test_irimager_get_frame_monotonic():
+    """Tests nqm.irimager.IRImager#get_frame_monotonic"""
+    irimager = IRImager(XML_FILE)
+
+    with irimager:
+        array, steady_time = irimager.get_frame_monotonic()
+
+        assert array.dtype == np.uint16
+        # should be 2-dimensional
+        assert array.ndim == 2
+        assert array.shape == (382, 288)
+        assert array.flags["C_CONTIGUOUS"]  # check if the array is row-major
+
+        assert steady_time > datetime.timedelta(seconds=0)
+        array, steady_time_2 = irimager.get_frame_monotonic()
+        assert steady_time_2 > steady_time
+
+
 def test_irimager_get_temp_range_decimal():
     """Tests that nqm.irimager.IRImager#get_temp_range_decimal returns an int"""
     irimager = IRImager(XML_FILE)

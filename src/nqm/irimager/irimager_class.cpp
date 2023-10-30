@@ -46,9 +46,17 @@ struct IRImager::impl {
   virtual void stop_streaming() { streaming_ = false; }
 
   /** @copydoc IRImager::get_frame() */
-  virtual std::tuple<IRImager::ThermalFrame,
-                     std::chrono::system_clock::time_point>
+  std::tuple<IRImager::ThermalFrame, std::chrono::system_clock::time_point>
   get_frame() {
+    auto [thermal_frame, monotonic_time_point] = this->get_frame_monotonic();
+    return std::make_tuple(std::move(thermal_frame),
+                           nqm::irimager::clock_cast(monotonic_time_point));
+  }
+
+  /** @copydoc IRImager::get_frame_monotonic() */
+  virtual std::tuple<IRImager::ThermalFrame,
+                     std::chrono::steady_clock::time_point>
+  get_frame_monotonic() {
     if (!streaming_) {
       throw std::runtime_error("IRIMAGER_STREAMOFF: Not streaming");
     }
@@ -59,7 +67,7 @@ struct IRImager::impl {
     auto my_array = IRImager::ThermalFrame::Constant(frame_size[0],
                                                      frame_size[1], max_value);
 
-    return std::make_tuple(my_array, std::chrono::system_clock::now());
+    return std::make_tuple(my_array, std::chrono::steady_clock::now());
   }
 
   /** @copydoc IRImager::get_temp_range_decimal() */
@@ -220,8 +228,8 @@ struct IRImagerRealImpl final : public IRImager::impl {
     }
   }
 
-  std::tuple<IRImager::ThermalFrame, std::chrono::system_clock::time_point>
-  get_frame() override {
+  std::tuple<IRImager::ThermalFrame, std::chrono::steady_clock::time_point>
+  get_frame_monotonic() override {
     auto raw_frame_bytes =
         std::vector<unsigned char>(ir_device_->getRawBufferSize());
     /** time of frame, in monotonic seconds since std::chrono::steady_clock */
@@ -259,9 +267,9 @@ struct IRImagerRealImpl final : public IRImager::impl {
           // GCC will tail-call optimize too on x86_64 and ARM64, but even if it
           // doesn't we're extremely unlikely to have a stack overflow, even if
           // imaging at 1000Hz
-          [[clang::musttail]] return get_frame();
+          [[clang::musttail]] return get_frame_monotonic();
 #else
-          return get_frame();
+          return get_frame_monotonic();
 #endif
       }
 
@@ -274,12 +282,13 @@ struct IRImagerRealImpl final : public IRImager::impl {
         std::chrono::floor<std::chrono::nanoseconds>(seconds_since_epoch);
 
     // need to convert our double duration to an integer duration
-    auto steady_time_point = std::chrono::time_point<std::chrono::steady_clock>(
-        nanoseconds_since_epoch);
+    auto monotonic_time_point =
+        std::chrono::time_point<std::chrono::steady_clock>(
+            nanoseconds_since_epoch);
 
     return std::make_tuple(
         std::get<IRImager::ThermalFrame>(std::move(thermal_data_result)),
-        nqm::irimager::clock_cast(steady_time_point));
+        std::move(monotonic_time_point));
   }
 
   short get_temp_range_decimal() override {
@@ -394,6 +403,11 @@ void IRImager::stop_streaming() { pImpl_->stop_streaming(); }
 std::tuple<IRImager::ThermalFrame, std::chrono::system_clock::time_point>
 IRImager::get_frame() {
   return pImpl_->get_frame();
+}
+
+std::tuple<IRImager::ThermalFrame, std::chrono::steady_clock::time_point>
+IRImager::get_frame_monotonic() {
+  return pImpl_->get_frame_monotonic();
 }
 
 short IRImager::get_temp_range_decimal() {

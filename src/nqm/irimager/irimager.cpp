@@ -48,6 +48,8 @@ to control these cameras.)";
       .def(pybind11::init<const std::filesystem::path &>(),
            DOC(IRImager, IRImager), no_gil)
       .def("get_frame", &IRImager::get_frame, DOC(IRImager, get_frame), no_gil)
+      .def("get_frame_monotonic", &IRImager::get_frame_monotonic,
+           DOC(IRImager, get_frame_monotonic), no_gil)
       .def("get_temp_range_decimal", &IRImager::get_temp_range_decimal,
            DOC(IRImager, get_temp_range_decimal), no_gil)
       .def("get_library_version", &IRImager::get_library_version,
@@ -65,6 +67,8 @@ to control these cameras.)";
            DOC(IRImager, IRImager), no_gil)
       .def("get_frame", &IRImagerMock::get_frame, DOC(IRImager, get_frame),
            no_gil)
+      .def("get_frame_monotonic", &IRImager::get_frame_monotonic,
+           DOC(IRImager, get_frame_monotonic), no_gil)
       .def("get_temp_range_decimal", &IRImagerMock::get_temp_range_decimal,
            DOC(IRImager, get_temp_range_decimal), no_gil)
       .def("start_streaming", &IRImagerMock::start_streaming,
