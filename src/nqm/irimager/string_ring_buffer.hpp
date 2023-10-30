@@ -11,6 +11,7 @@
 #define NQM_IRIMAGER_STRING_RING_BUFFER
 
 #include <array>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 

@@ -110,6 +110,16 @@ else()
   target_link_libraries(irimager_class PRIVATE IRImager::IRImager)
 endif(IRImager_mock)
 
+add_library(irlogger_parser OBJECT
+  "src/nqm/irimager/irlogger_parser.cpp"
+)
+target_compile_definitions(irlogger_parser PRIVATE "${IRImager_DEFINITIONS}")
+set_target_properties(irlogger_parser PROPERTIES
+  PRIVATE_HEADER
+    "src/nqm/irimager/irlogger_parser.hpp"
+  POSITION_INDEPENDENT_CODE ON # -fPIC
+)
+
 add_library(logger OBJECT
   "src/nqm/irimager/logger.cpp"
 )
