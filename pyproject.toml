@@ -31,6 +31,10 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
 ]
 
+[project.urls]
+Homepage = "https://github.com/nqminds/nqm-irimager"
+Repository = "https://github.com/nqminds/nqm-irimager.git"
+
 [build-system]
 requires = [
     "scikit-build-core>=0.4.7",
