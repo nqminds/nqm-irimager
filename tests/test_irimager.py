@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 
 from nqm.irimager import IRImagerMock as IRImager
-from nqm.irimager import Logger
+from nqm.irimager import Logger, monotonic_to_system_clock
 
 XML_FILE = pathlib.Path(__file__).parent / "__fixtures__" / "382x288@27Hz.xml"
 README_FILE = pathlib.Path(__file__).parent.parent / "README.md"
@@ -77,6 +77,31 @@ def test_irimager_get_frame():
 
         # image should have been taken in the last 30 seconds
         assert timestamp > datetime.datetime.now() - datetime.timedelta(seconds=30)
+
+
+def test_irimager_get_frame_monotonic():
+    """Tests nqm.irimager.IRImager#get_frame_monotonic"""
+    irimager = IRImager(XML_FILE)
+
+    with irimager:
+        array, steady_time = irimager.get_frame_monotonic()
+
+        assert array.dtype == np.uint16
+        # should be 2-dimensional
+        assert array.ndim == 2
+        assert array.shape == (382, 288)
+        assert array.flags["C_CONTIGUOUS"]  # check if the array is row-major
+
+        assert steady_time > datetime.timedelta(seconds=0)
+        array, steady_time_2 = irimager.get_frame_monotonic()
+        assert steady_time_2 > steady_time
+
+    assert monotonic_to_system_clock(
+        steady_time
+    ) > datetime.datetime.now() - datetime.timedelta(seconds=30)
+    assert monotonic_to_system_clock(
+        steady_time_2
+    ) > datetime.datetime.now() - datetime.timedelta(seconds=30)
 
 
 def test_irimager_get_temp_range_decimal():

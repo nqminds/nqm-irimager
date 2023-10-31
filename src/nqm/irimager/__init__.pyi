@@ -24,6 +24,30 @@ __version__: str
 This is *not* the version of the underlying C++ libirimager library.
 """
 
+def monotonic_to_system_clock(
+    steady_time_point: datetime.timedelta,
+) -> datetime.datetime:
+    """
+    Converts from `steady_clock` to `system_clock`.
+
+    Converts a time_point from std::chrono::steady_clock (time since last boot)
+    to std::chrono::system_clock (aka time since UNIX epoch).
+
+    C++20 has a function called std::chrono::clock_cast that will do this
+    for us, but we're stuck on C++17, so instead we have to do this imprecise
+    monstrosity to do the conversion.
+
+    Remarks:
+        This function is imprecise!!! Calling it multiple times with the same
+        data will result in different results.
+
+    Warning:
+        The monotonic/steady_clock might only count when the computer is powered
+        on. E.g. if the system was in a sleep state, the monotonic time may not
+        have increased. Because of this, you should not rely on this function
+        to return accurate results for past time points.
+    """
+
 class IRImager:
     """IRImager object - interfaces with a camera."""
 
@@ -60,7 +84,19 @@ class IRImager:
               1. A 2-D matrix containing the image. This must be adjusted by
                  :py:meth:`~IRImager.get_temp_range_decimal` to get the actual
                  temperature in degrees Celcius, offset from -100 ℃.
-              2. The time the image was taken.
+              2. The approximate time the image was taken.
+        """
+    def get_frame_monotonic(
+        self,
+    ) -> typing.Tuple[npt.NDArray[np.uint16], datetime.timedelta]:
+        """Return a frame, with a monotonic/steady_clock timestamp.
+
+        Similar to :py:meth:`get_frame`, except returns a monotonic timepoint that the
+        IRImagerDirectSDK returns, which is more accurate.
+
+        Please be aware that the epoch of the monotonic timepoint is undefined,
+        and may be the time since last boot or the time since the program
+        started.
         """
     def get_temp_range_decimal(self) -> int:
         """The number of decimal places in the thermal data

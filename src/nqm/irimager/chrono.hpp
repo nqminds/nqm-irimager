@@ -2,6 +2,10 @@
 #define CHRONO_HPP
 
 #include <chrono>
+#include <ctime>
+#include <sstream>
+#include <system_error>
+#include <thread>
 
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/chrono.h>  // needed for logging/formatting std::chrono
@@ -22,6 +26,12 @@ namespace irimager {
  * @remarks
  * This function is imprecise!!! Calling it multiple times with the same data
  * will result in different results.
+ *
+ * @warning
+ * The monotonic/steady_clock might only count when the computer is powered on.
+ * E.g. if the system was in a sleep state, the monotonic time may not have
+ * increased. Because of this, you should not rely on this function to return
+ * accurate results for past time points.
  */
 inline std::chrono::time_point<std::chrono::system_clock> clock_cast(
     const std::chrono::time_point<std::chrono::steady_clock>

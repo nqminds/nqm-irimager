@@ -46,6 +46,7 @@ add_custom_command(
     --output "${CMAKE_CURRENT_BINARY_DIR}/docstrings.h"
     "-I;$<JOIN:$<TARGET_PROPERTY:irimager,INCLUDE_DIRECTORIES>,;-I;>"
     -std=c++17
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/nqm/irimager/chrono.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/nqm/irimager/irimager_class.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/nqm/irimager/logger_context_manager.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/nqm/irimager/logger.hpp"
@@ -191,6 +192,7 @@ target_compile_definitions(irimager PRIVATE "${IRImager_DEFINITIONS}")
 target_link_libraries(irimager
   PRIVATE
     pybind11::headers
+    spdlog::spdlog_header_only
     irimager_class
     irlogger_parser
     irlogger_to_spd
