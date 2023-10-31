@@ -5,6 +5,7 @@
 [![Linting: Pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 [![Managed by PDM](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev/)
+[![Documentation on GitHub Pages](https://github.com/nqminds/nqm-irimager/actions/workflows/docs.yml/badge.svg?branch=main)](https://nqminds.github.io/nqm-irimager/)
 
 Python module for interfacing with [EvoCortex IRImagerDirect SDK][1].
 
