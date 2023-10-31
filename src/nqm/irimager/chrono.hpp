@@ -2,6 +2,10 @@
 #define CHRONO_HPP
 
 #include <chrono>
+#include <ctime>
+#include <sstream>
+#include <system_error>
+#include <thread>
 
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/chrono.h>  // needed for logging/formatting std::chrono
