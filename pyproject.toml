@@ -1,6 +1,6 @@
 [project]
 name = "nqm.irimager"
-version = "0.1.0a0" # equivalent to 0.1.0-alpha.0
+version = "1.0.0"
 description = "Python module for interfacing with EvoCortex IRImagerDirect SDK"
 # Python 3.12 removes distutils, which seems to break stuff
 # and prevents installing this package, see https://peps.python.org/pep-0632
@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 classifiers = [
-  "Development Status :: 2 - Pre-Alpha", # currently only contains mocked interfaces
+  "Development Status :: 5 - Production/Stable",
   "Topic :: System :: Hardware :: Hardware Drivers",
   "Topic :: Multimedia :: Graphics :: Capture :: Digital Camera",
   "Intended Audience :: Developers",
