@@ -38,6 +38,8 @@ extern "C" {
 #include "./chrono.hpp"
 #include "./irlogger_parser.hpp"
 
+namespace {
+
 /** RAII wrapper to handle reading from a POSIX FIFO */
 class PosixFileReadOnly {
  public:
@@ -269,7 +271,7 @@ class IRLoggerReader {
  * 0. If we're in the last bit of a second, block this function from returning
  * until the next second to avoid race-conditions.
  */
-static std::filesystem::path irlogger_log_path(
+std::filesystem::path irlogger_log_path(
     const std::filesystem::path &irlogger_log_path_prefix,
     std::chrono::milliseconds delay_if_at_end_of_second =
         std::chrono::milliseconds(100)) {
@@ -281,12 +283,16 @@ static std::filesystem::path irlogger_log_path(
          ".log";
 }
 
+}  // namespace
+
 #ifdef IR_IMAGER_MOCK
 
 #include <chrono>
 #include <fstream>
 #include <iostream>
 #include <thread>
+
+namespace {
 
 /**
  * Mock class that logs data to given socket.
@@ -324,9 +330,12 @@ class IRLoggerImpl {
     irlogger_mock_thread_.get();
   }
 };
+}  // namespace
 #else /* IR_IMAGER_MOCK */
 
 #include <libirimager/IRLogger.h>
+
+namespace {
 
 /**
  * @brief Run the given function with a timeout.
@@ -407,6 +416,7 @@ class IRLoggerImpl {
     }
   }
 };
+}  // namespace
 #endif /* IR_IMAGER_MOCK */
 
 struct IRLoggerToSpd::impl {
