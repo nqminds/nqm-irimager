@@ -35,3 +35,17 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           path: ./build/html
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write      # needed to deploy to Pages
+      id-token: write   # needed to verify the deployment originates from an appropriate source
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
