@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 
 from nqm.irimager import IRImagerMock as IRImager
-from nqm.irimager import Logger
+from nqm.irimager import Logger, monotonic_to_system_clock
 
 XML_FILE = pathlib.Path(__file__).parent / "__fixtures__" / "382x288@27Hz.xml"
 README_FILE = pathlib.Path(__file__).parent.parent / "README.md"
@@ -95,6 +95,13 @@ def test_irimager_get_frame_monotonic():
         assert steady_time > datetime.timedelta(seconds=0)
         array, steady_time_2 = irimager.get_frame_monotonic()
         assert steady_time_2 > steady_time
+
+    assert monotonic_to_system_clock(
+        steady_time
+    ) > datetime.datetime.now() - datetime.timedelta(seconds=30)
+    assert monotonic_to_system_clock(
+        steady_time_2
+    ) > datetime.datetime.now() - datetime.timedelta(seconds=30)
 
 
 def test_irimager_get_temp_range_decimal():

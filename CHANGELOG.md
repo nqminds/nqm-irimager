@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `nqm.irimager.IRImager.get_frame_monotonic` Python method, which can be
   used to get the monotonic time of a frame directly from the
   EvoCortex IRImagerDirect SDK ([#84][]).
+- Add `nqm.irimager.monotonic_to_system_clock` function to convert a monotonic
+  time to a system clock time ([#84][]).
 
 [#81]: https://github.com/nqminds/nqm-irimager/pull/81
 [#84]: https://github.com/nqminds/nqm-irimager/pull/84

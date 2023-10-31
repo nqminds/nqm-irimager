@@ -24,6 +24,24 @@ __version__: str
 This is *not* the version of the underlying C++ libirimager library.
 """
 
+def monotonic_to_system_clock(
+    steady_time_point: datetime.timedelta,
+) -> datetime.datetime:
+    """
+    Converts from `steady_clock` to `system_clock`.
+
+    Converts a time_point from std::chrono::steady_clock (time since last boot)
+    to std::chrono::system_clock (aka time since UNIX epoch).
+
+    C++20 has a function called std::chrono::clock_cast that will do this
+    for us, but we're stuck on C++17, so instead we have to do this imprecise
+    monstrosity to do the conversion.
+
+    Remarks:
+        This function is imprecise!!! Calling it multiple times with the same
+        data will result in different results.
+    """
+
 class IRImager:
     """IRImager object - interfaces with a camera."""
 

@@ -6,6 +6,7 @@
 #include <pybind11/stl/filesystem.h>
 #include <pybind11/stl_bind.h>
 
+#include "./chrono.hpp"
 #include "./irimager_class.hpp"
 #include "./logger.hpp"
 #include "./logger_context_manager.hpp"
@@ -43,6 +44,9 @@ to control these cameras.)";
 
   // helps prevent deadlock when calling code that doesn't touch Python objs
   const auto no_gil = pybind11::call_guard<pybind11::gil_scoped_release>();
+
+  m.def("monotonic_to_system_clock", &nqm::irimager::clock_cast,
+        DOC(nqm, irimager, clock_cast), no_gil);
 
   pybind11::class_<IRImager>(m, "IRImager", DOC(IRImager))
       .def(pybind11::init<const std::filesystem::path &>(),
