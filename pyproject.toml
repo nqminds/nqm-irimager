@@ -8,6 +8,9 @@ requires-python = ">=3.8, <3.12" # remember to manually sync with classifiers
 authors = [
     { name = "Alois Klink", email = "alois@nquiringminds.com" }
 ]
+maintainers = [
+    { name = "Ashley Setter", email = "ash@nquiringminds.com" }
+]
 readme = "README.md"
 
 dependencies = [
