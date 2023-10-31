@@ -1,5 +1,6 @@
 # nqm.irimager
 
+[![PyPI - Version](https://img.shields.io/pypi/v/nqm.irimager)](https://pypi.org/project/nqm.irimager/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Linting: Pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
@@ -11,23 +12,46 @@ Python module for interfacing with [EvoCortex IRImagerDirect SDK][1].
 
 ## Setup
 
-### Installing `libirimager`
+`nqm.irimager` uses the [EvoCortex IRImagerDirect SDK][1]
+(also known as `libirimager`).
 
-`nqm.irimager` requires the [EvoCortex IRImagerDirect SDK][1]
-(known as `libirimager`). Please follow the instructions on their webpage to
-install the package.
+Before using `nqm.irimager`, you'll need to perform the following setup for
+each camera you have:
 
-You will also need to
 - Download calibration data using `sudo ir_download_calibration`, see
   <http://documentation.evocortex.com/libirimager2/html/Installation.html#subsec_download>
 - Create an XML configuration file using `ir_generate_configuration`, see
   <http://documentation.evocortex.com/libirimager2/html/Installation.html#subsec_config>
 
+### Installing pre-built wheel from PyPI
+
+`nqm.irimager` publishes pre-built binary wheels for a couple of targets to
+[PyPI][], so you may just be able to run:
+
+```bash
+pip install nqm.irimager
+```
+
+[PyPI]: https://pypi.org/project/nqm.irimager/
+
+### Compiling your own wheel
+
+You can compile `nqm.irimager` from source for testing, or if you want to use
+a target that we don't yet publish binaries for.
+
+You'll need a compiler that supports at least C++17.
+
+#### Installing `libirimager`
+
+`nqm.irimager` requires the [EvoCortex IRImagerDirect SDK][1]
+(known as `libirimager`). Please follow the instructions on their webpage to
+install the package.
+
 It's possible to install a mocked version of `nqm.irimager` for testing
 by defining `SKBUILD_CMAKE_DEFINE='IRImager_mock=ON'` whiling building
 `nqm.irimager`.
 
-### Install `nqm.irimager`
+#### Install `nqm.irimager`
 
 This repo uses [PEP621](https://peps.python.org/pep-0621/) to manage
 dependencies. [scikit-build-core](https://pypi.org/project/scikit-build-core/)
