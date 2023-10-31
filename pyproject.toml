@@ -34,7 +34,9 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/nqminds/nqm-irimager"
+Documentation = "https://nqminds.github.io/nqm-irimager/"
 Repository = "https://github.com/nqminds/nqm-irimager.git"
+Changelog = "https://github.com/nqminds/nqm-irimager/blob/main/CHANGELOG.md"
 
 [build-system]
 requires = [
