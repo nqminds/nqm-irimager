@@ -37,6 +37,8 @@ jobs:
           path: ./build/html
 
   deploy:
+    name: publish docs (main-branch only)
+    if: github.ref == 'refs/heads/main'
     needs: build
     permissions:
       pages: write      # needed to deploy to Pages
