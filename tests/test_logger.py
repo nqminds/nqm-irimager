@@ -1,5 +1,8 @@
 """Tests for nqm.irimager.Logging"""
+import datetime
 import logging
+import re
+import time
 
 import pytest
 
@@ -42,3 +45,17 @@ def test_logger_should_ban_multiple_instances():
     # creating a second logger should be fine, if the first one is deleted
     del first_logger
     Logger()
+
+def test_logger_should_work_at_end_of_second(caplog):
+    """Should wait in the last 50ms of the second"""
+
+    now = datetime.datetime.now()
+    # wait until next 950ms mark
+    wait_to = now + datetime.timedelta(milliseconds=950 - now.microsecond / 1000)
+    wait_to = wait_to > now or wait_to + datetime.timedelta(seconds=1)
+    time.sleep(wait_to - now)
+
+    with caplog.at_level(1):
+        Logger()
+
+        assert re.match(r"Waiting \d+ until next second.", caplog.text)
