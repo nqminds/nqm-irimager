@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `nqm.logger.LoggerContextManager` Python class, which automatically
+  creates/deletes a
+  [`nqm.logger.Logger`](https://nqminds.github.io/nqm-irimager/apidoc/nqm.irimager.html#nqm.irimager.Logger)
+  object when used in a [`with:` statement][PEP 343] ([#81][]).
+
+[#81]: https://github.com/nqminds/nqm-irimager/pull/81
+[PEP 343]: https://peps.python.org/pep-0343/
+
 ## [1.0.0] - 2023-10-30
 
 Initial release.

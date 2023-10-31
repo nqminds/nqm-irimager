@@ -71,16 +71,17 @@ easy as:
 ```python
 import datetime
 import logging
-from nqm.irimager import IRImager, Logger
+from nqm.irimager import IRImager, LoggerContextManager
 
 logging.basicConfig()
 logging.getLogger().setLevel(1) # trace
-logger = Logger()
+
 # Your XML config,
 # see http://documentation.evocortex.com/libirimager2/html/Overview.html#subsec_overview_config_file
 XML_CONFIG = "tests/__fixtures__/382x288@27Hz.xml"
-irimager = IRImager(XML_CONFIG)
-with irimager:
+with LoggerContextManager():
+  irimager = IRImager(XML_CONFIG)
+  with irimager:
     print(f"Started at {datetime.datetime.now()}")
     while True: # press CTRL+C to stop this program
         try:
@@ -90,8 +91,6 @@ with irimager:
           raise error
         frame_in_celsius = array / (10 ** irimager.get_temp_range_decimal()) - 100
         print(f"At {timestamp}: Average temperature is {frame_in_celsius.mean()}")
-
-del logger # to stop
 ```
 
 ## Development
