@@ -79,10 +79,7 @@ testpaths = [
     "tests",
     "build/tests",
 ]
-# the slowest test is
-# build/tests/test_irlogger_parser::test_irlogger_parser::HandlesLargeInputs,
-# which can take more than 10s in GitHUb Actions
-timeout = 20
+timeout = 10 # each test should finish within 5 seconds
 
 [tool.pdm.dev-dependencies]
 lint = [
