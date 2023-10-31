@@ -169,3 +169,19 @@ automatically parses Google-style Python docstrings.
 ```bash
 pdm run sphinx-build -M html docs/ build/
 ```
+
+### Publishing a new release
+
+To publish a new release to PyPI, do:
+
+1. Make a new commit called `chore: release v1.X.X`
+   This should change:
+    - The `project.version` field in the `pyproject.toml` file (e.g. https://github.com/nqminds/nqm-irimager/blob/47c1b941df8ecfabcc96fc6d0f17120ec6105671/pyproject.toml#L3)
+    - Make a new entry in the `CHANGELOG.md` file, moving any appropriate entries
+      from the `Unreleased` section.
+2. Push the commit to GitHub.
+3. Make a new
+   [GitHub release](https://github.com/nqminds/nqm-irimager/releases) for the commit you made, copying the CHANGELOG.md entry for the release notes.
+4. The [`build.yml` GitHub Action](https://github.com/nqminds/nqm-irimager/actions/workflows/build.yml?query=event%3Arelease) should automatically build and publish
+   the new release to PyPI.
+5. Merge the released commit to the `main` branch if you haven't already.
