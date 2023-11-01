@@ -19,8 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `nqm.irimager.monotonic_to_system_clock` function to convert a monotonic
   time to a system clock time ([#84][]).
 
+### Fixed
+
+- Truncate timestamps to
+  [`std::chrono::steady_clock::duration`](https://en.cppreference.com/w/cpp/chrono/steady_clock)
+  instead of
+  [`std::chrono::nanoseconds`](https://en.cppreference.com/w/cpp/chrono/duration)
+  ([#86][]).
+
 [#81]: https://github.com/nqminds/nqm-irimager/pull/81
 [#84]: https://github.com/nqminds/nqm-irimager/pull/84
+[#86]: https://github.com/nqminds/nqm-irimager/pull/86
 [PEP 343]: https://peps.python.org/pep-0343/
 
 ## [1.0.0] - 2023-10-30
