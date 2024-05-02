@@ -86,6 +86,20 @@ class IRImager:
                  temperature in degrees Celcius, offset from -100 ℃.
               2. The approximate time the image was taken.
         """
+    def get_frames(self) -> npt.NDArray[typing.Tuple[npt.NDArray[np.uint16], datetime.datetime]]:
+        """Return an array of frames
+        
+        Throws:
+            RuntimeError if a frame cannot be loaded, e.g. if the camera isn't
+            streaming.
+
+        Returns:
+            An array of tuples containing:
+              1. A 2-D matrix containing the image. This must be adjusted by
+                 :py:meth:`~IRImager.get_temp_range_decimal` to get the actual
+                 temperature in degrees Celcius, offset from -100 ℃.
+              2. The approximate time the image was taken.
+        """
     def get_frame_monotonic(
         self,
     ) -> typing.Tuple[npt.NDArray[np.uint16], datetime.timedelta]:

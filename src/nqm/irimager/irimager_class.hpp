@@ -97,6 +97,13 @@ class IRImager {
   std::tuple<ThermalFrame, std::chrono::system_clock::time_point> get_frame();
 
   /**
+   * Returns many frames
+   * 
+   */
+  std::vector<std::tuple<ThermalFrame, std::chrono::steady_clock::time_point>>
+  get_frames(int numberOfFrames, std::chrono::milliseconds frameInterval);
+
+  /**
    * @brief Return a frame, with a monotonic/steady_clock timestamp.
    *
    * Similar to :py:meth:`get_frame`, except returns a monotonic timepoint that

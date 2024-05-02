@@ -70,6 +70,39 @@ struct IRImager::impl {
     return std::make_tuple(my_array, std::chrono::steady_clock::now());
   }
 
+  /** @copydoc IRImager::get_frames() */
+  std::vector<std::tuple<ThermalFrame, std::chrono::steady_clock::time_point>> 
+  get_frames(int numberOfFrames, std::chrono::milliseconds frameInterval) {
+    std::vector<std::tuple<ThermalFrame, std::chrono::steady_clock::time_point>> capturedFrames;
+
+    // Loop to capture frames
+    for (int i = 0; i < numberOfFrames; ++i) {
+      // Capture start time
+      auto startTime = std::chrono::steady_clock::now();
+
+      // Capture frame
+      auto [thermalFrame, timeStamp] = get_frame();
+
+      // Store frame and timestamp in the vector
+      capturedFrames.emplace_back(std::move(thermalFrame), timeStamp);
+
+      // Calculate the time taken to execute get_frame
+      auto endTime = std::chrono::steady_clock::now();
+      auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+
+      // Calculate the remaining time to sleep
+      auto remainingTime = frameInterval - elapsedTime;
+
+      // Ensure that the remaining time is non-negative
+      if (remainingTime > std::chrono::milliseconds::zero()) {
+        // Sleep for the remaining time
+        std::this_thread::sleep_for(remainingTime);
+      }
+    }
+
+    return capturedFrames;
+  }
+
   /** @copydoc IRImager::get_temp_range_decimal() */
   virtual short get_temp_range_decimal() { return 1; }
 
@@ -403,6 +436,11 @@ void IRImager::stop_streaming() { pImpl_->stop_streaming(); }
 std::tuple<IRImager::ThermalFrame, std::chrono::system_clock::time_point>
 IRImager::get_frame() {
   return pImpl_->get_frame();
+}
+
+std::vector<std::tuple<ThermalFrame, std::chrono::steady_clock::time_point>>
+IRImager::get_frames(int numberOfFrames, std::chrono::milliseconds frameInterval) {
+  return pImpl_->get_frames(numberOfFrames, frameInterval);
 }
 
 std::tuple<IRImager::ThermalFrame, std::chrono::steady_clock::time_point>
