@@ -278,13 +278,12 @@ struct IRImagerRealImpl final : public IRImager::impl {
 
     auto seconds_since_epoch =
         std::chrono::duration<double, std::ratio<1> >(timestamp);
-    auto nanoseconds_since_epoch =
-        std::chrono::floor<std::chrono::nanoseconds>(seconds_since_epoch);
 
     // need to convert our double duration to an integer duration
     auto monotonic_time_point =
         std::chrono::time_point<std::chrono::steady_clock>(
-            nanoseconds_since_epoch);
+            std::chrono::duration_cast<std::chrono::steady_clock::duration>(
+                seconds_since_epoch));
 
     return std::make_tuple(
         std::get<IRImager::ThermalFrame>(std::move(thermal_data_result)),
